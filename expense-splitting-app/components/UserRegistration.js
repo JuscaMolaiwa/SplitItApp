@@ -32,18 +32,15 @@ const UserRegistration = () => {
     setErrorMessage('');
 
     try {
-      // Sending data to the backend using fetch
+      // Example of sending data to the backend using fetch
       const response = await fetch('http://localhost:5000/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(userData),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
       const data = await response.json();
 
@@ -54,7 +51,7 @@ const UserRegistration = () => {
         setErrorMessage(data.error || 'Registration failed');
       }
     } catch (error) {
-      setErrorMessage(`An error occurred. Please try again. ${error.message}`);
+      setErrorMessage('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -7,12 +7,31 @@ from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv # type: ignore
 
+from flask_migrate import Migrate # type: ignore
+
+from flask import Flask, send_from_directory # type: ignore
+
+from flask_cors import CORS # type: ignore
+
+load_dotenv()
+
 app = Flask(__name__)
+# Apply CORS for all routes starting with '/api/*'
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:3000"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
+        "supports_credentials": True
+    }
+})
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # User Model
 class User(db.Model):
@@ -129,5 +148,9 @@ def get_current_user_id():
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Invalid token, please log in again'}), 401
 
+@app.route('/')
+def homepage():
+    return send_from_directory(app.template_folder, 'index.html')
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5000)
