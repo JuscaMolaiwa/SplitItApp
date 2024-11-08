@@ -33,7 +33,7 @@ The Expense Splitting App is a web application that allows groups of people, suc
 ## Installation
 1. Clone the repository:
 ```
-git clone https://github.com/your-username/expense-splitting-app.git
+git clone https://github.com/your-username/SplitItApp.git
 ```
 2. Install dependencies:
 ```
