@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const ProfileManagement = () => {
-  const [name, setName] = useState('');
+  const [full_name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ const ProfileManagement = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, bio }),
+        body: JSON.stringify({ full_name, bio }),
       });
 
       if (!response.ok) {
@@ -35,6 +35,7 @@ const ProfileManagement = () => {
       // On success, you can handle the response (e.g., show a success message, redirect, etc.)
       const data = await response.json();
       console.log('Profile updated:', data);
+      alert('Profile updated successfully');
     } catch (error) {
       console.error('Error updating profile:', error);
       setError(error.message); // Set error to be displayed in the UI
@@ -49,11 +50,11 @@ const ProfileManagement = () => {
       
       {/* Name Input */}
       <div>
-        <label htmlFor="name" className="block font-medium">Name</label>
+        <label htmlFor="full_name" className="block font-medium">Full Name</label>
         <input
-          id="name"
+          id="full_name"
           type="text"
-          value={name}
+          value={full_name}
           onChange={(e) => setName(e.target.value)}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />

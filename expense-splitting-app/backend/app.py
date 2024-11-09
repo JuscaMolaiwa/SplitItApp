@@ -37,6 +37,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     full_name = db.Column(db.String(100))
     profile_image = db.Column(db.String(255))
+    bio = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Group Model
@@ -155,15 +156,15 @@ def update_profile(user_id):
 
 
     data = request.get_json()
-    name = data.get('name')
+    full_name = data.get('full_name')
     bio = data.get('bio')
 
-    if not name or not bio:
-        return jsonify({'message': 'Name and Bio are required'}), 400
+    if not full_name or not bio:
+        return jsonify({'message': 'Full Name and Bio are required'}), 400
 
     # Logic to update the user's profile in the database
     user = User.query.get(current_user_id)
-    user.name = name
+    user.full_name = full_name
     user.bio = bio
     db.session.commit()
 
@@ -179,7 +180,9 @@ def get_profile(user_id):
 
     # Return the profile data (e.g., name and bio)
     return jsonify({
-        'username': user.username
+        'username': user.username,
+        'full_name':user.full_name,
+        'bio':user.bio
     }), 200
 
 
