@@ -13,25 +13,20 @@ from flask import Flask, send_from_directory # type: ignore
 
 from flask_cors import CORS # type: ignore
 
-load_dotenv()
-
 app = Flask(__name__)
-# Apply CORS for all routes starting with '/api/*'
-CORS(app, resources={
-    r"/api/*": {
-        "origins": ["http://localhost:3000"],
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
-        "supports_credentials": True
-    }
-})
+
+load_dotenv()
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# In your CORS configuration, check that OPTIONS is an allowed method
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 # User Model
 class User(db.Model):
@@ -87,7 +82,7 @@ def register():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    user = User.query.filter_by(email=data['email']).first()
+    user = User.query.filter_by(username=data['username']).first()
     if user and check_password_hash(user.password_hash, data['password']):
         token = jwt.encode({
             'user_id': user.id,
@@ -100,11 +95,13 @@ def login():
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user_id = get_current_user_id()
+        user_id = get_current_user_id()  #  this is a function that retrieves the logged-in user ID.
         if not user_id:
             return jsonify({'error': 'Authentication required'}), 401
-        return f(*args, **kwargs)
+        # Pass the user_id as a keyword argument to the view function
+        return f(user_id=user_id, *args, **kwargs)
     return decorated_function
+
 
 # Create Group with login_required decorator
 @app.route('/api/groups', methods=['POST'])
@@ -147,6 +144,44 @@ def get_current_user_id():
         return jsonify({'error': 'Token expired, please log in again'}), 401
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Invalid token, please log in again'}), 401
+
+# Profile update route
+@app.route('/api/profile', methods=['PUT'])
+@login_required
+def update_profile(user_id):
+    current_user_id = get_current_user_id()  # Call the helper function
+    if not current_user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+
+    data = request.get_json()
+    name = data.get('name')
+    bio = data.get('bio')
+
+    if not name or not bio:
+        return jsonify({'message': 'Name and Bio are required'}), 400
+
+    # Logic to update the user's profile in the database
+    user = User.query.get(current_user_id)
+    user.name = name
+    user.bio = bio
+    db.session.commit()
+
+    return jsonify({'message': 'Profile updated successfully!'}), 200
+
+@app.route('/api/profile', methods=['GET'])
+@login_required
+def get_profile(user_id):
+    # Retrieve the user's profile from the database
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    # Return the profile data (e.g., name and bio)
+    return jsonify({
+        'username': user.username
+    }), 200
+
 
 @app.route('/')
 def homepage():
