@@ -40,7 +40,7 @@ const UserLogin = () => {
         alert('Login successful');
         
         // Handle redirect or login success logic
-        navigate('/profile');  // Redirecting to the Profile page
+        navigate('/app');  // Redirecting to the Profile page
       } else {
         setErrorMessage(data.error || 'Login failed');
       }

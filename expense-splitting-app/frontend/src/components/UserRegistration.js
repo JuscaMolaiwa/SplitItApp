@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserRegistration = () => {
   const [username, setUsername] = useState('');
@@ -8,6 +9,8 @@ const UserRegistration = () => {
   const [profileImage, setProfileImage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate(); // Initialize navigate for redirection
 
   const handleRegistration = async () => {
     if (!username || !password || !email || !fullName) {
@@ -49,7 +52,9 @@ const UserRegistration = () => {
 
       if (response.ok) {
         alert('User registered successfully');
-        // You can redirect the user or clear the form, etc.
+        
+      //redirect the user to the main app
+      navigate('/app');  // '/' is the route for UserSystemApp
       } else {
         setErrorMessage(data.error || 'Registration failed');
       }

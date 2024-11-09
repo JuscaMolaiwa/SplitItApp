@@ -13,6 +13,8 @@ from flask import Flask, send_from_directory # type: ignore
 
 from flask_cors import CORS # type: ignore
 
+from werkzeug.utils import secure_filename # type: ignore
+
 app = Flask(__name__)
 
 load_dotenv()
@@ -20,6 +22,14 @@ load_dotenv()
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Ensure the upload folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 db = SQLAlchemy(app)
@@ -37,6 +47,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     full_name = db.Column(db.String(100))
     profile_image = db.Column(db.String(255))
+    bio = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Group Model
@@ -106,7 +117,7 @@ def login_required(f):
 # Create Group with login_required decorator
 @app.route('/api/groups', methods=['POST'])
 @login_required
-def create_group():
+def create_group(user_id):
     user_id = get_current_user_id()
     data = request.get_json()
     try:
@@ -129,6 +140,17 @@ def create_group():
         return jsonify({'message': 'Group created successfully', 'group_id': group.id}), 201
     except Exception as e:
         return jsonify({'error': 'Failed to create group', 'details': str(e)}), 400
+    
+@app.route('/api/groups', methods=['GET'])
+@login_required
+def get_groups(user_id):
+    try:
+        groups = Group.query.filter_by(created_by=user_id).all()  # Get groups created by the logged-in user
+        group_list = [{'name': group.name, 'description': group.description} for group in groups]
+        return jsonify({'groups': group_list}), 200
+    except Exception as e:
+        return jsonify({'error': 'Failed to retrieve groups', 'details': str(e)}), 400
+
 
 # Helper function to get the current user ID from the JWT token
 def get_current_user_id():
@@ -145,6 +167,16 @@ def get_current_user_id():
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Invalid token, please log in again'}), 401
 
+
+
+ # Function to check allowed image extensions
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
 # Profile update route
 @app.route('/api/profile', methods=['PUT'])
 @login_required
@@ -153,18 +185,33 @@ def update_profile(user_id):
     if not current_user_id:
         return jsonify({'error': 'Unauthorized'}), 401
 
-
-    data = request.get_json()
-    name = data.get('name')
+    data = request.form
+    full_name = data.get('full_name')
     bio = data.get('bio')
 
-    if not name or not bio:
-        return jsonify({'message': 'Name and Bio are required'}), 400
+    if not full_name or not bio:
+        return jsonify({'message': 'Full Name and Bio are required'}), 400
+
+    # Check for profile image
+    profile_image = request.files.get('profile_image')
+    image_url = None
+    if profile_image and allowed_file(profile_image.filename):
+        # Save the profile image
+        filename = secure_filename(profile_image.filename)
+        image_path = os.path.join(UPLOAD_FOLDER, filename)
+        profile_image.save(image_path)
+
+        # Create the image URL to return to the frontend
+        image_url = f"/uploads/{filename}"  # This assumes that you have a route to serve images from the /uploads folder
+    else:
+        image_url = None  # No image uploaded, or invalid file type
 
     # Logic to update the user's profile in the database
     user = User.query.get(current_user_id)
-    user.name = name
+    user.full_name = full_name
     user.bio = bio
+    if image_url:
+        user.profile_image = image_url  # Store the URL in the profile_image field
     db.session.commit()
 
     return jsonify({'message': 'Profile updated successfully!'}), 200
@@ -179,8 +226,12 @@ def get_profile(user_id):
 
     # Return the profile data (e.g., name and bio)
     return jsonify({
-        'username': user.username
-    }), 200
+    'username': user.username,
+    'full_name': user.full_name,
+    'bio': user.bio,
+    'profile_image': user.profile_image if user.profile_image else None
+}), 200
+
 
 
 @app.route('/')
