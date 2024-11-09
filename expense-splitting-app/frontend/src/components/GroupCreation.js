@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // Group Creation
 const GroupCreation = () => {
     const [groupName, setGroupName] = useState('');
+    const [groupDescription, setGroupDescription] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(false);
@@ -17,7 +18,10 @@ const GroupCreation = () => {
         setErrorMessage('');
         setSuccessMessage('');
 
-        const groupData = { name: groupName };
+        const groupData = {
+            name: groupName,
+            description: groupDescription
+        };
 
         try {
             const token = localStorage.getItem('authToken');
@@ -61,6 +65,19 @@ const GroupCreation = () => {
                     type="text"
                     value={groupName}
                     onChange={(e) => setGroupName(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+            </div>
+
+            <div>
+                <label htmlFor="groupDescription" className="block font-medium">
+                    Group Description
+                </label>
+                <input
+                    id="groupDescription"
+                    type="text"
+                    value={groupDescription}
+                    onChange={(e) => setGroupDescription(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
             </div>

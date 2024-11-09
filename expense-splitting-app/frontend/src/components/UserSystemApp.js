@@ -1,22 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link, Routes, Route } from 'react-router-dom';
+import GroupCreation from './GroupCreation';
+import ProfileManagement from './ProfileManagement';
 
-// Main App Component
 const UserSystemApp = () => {
-    return (
-      <div className="max-w-md mx-auto py-8">
-        <nav className="mb-8">
-          <ul className="flex space-x-4">
-            <li><a href="#" className="text-indigo-600 hover:text-indigo-800 font-medium">User Registration</a></li>
-            <li><a href="#" className="text-indigo-600 hover:text-indigo-800 font-medium">Group Creation</a></li>
-            <li><a href="#" className="text-indigo-600 hover:text-indigo-800 font-medium">Profile Management</a></li>
-          </ul>
-        </nav>
-  
-        <UserRegistration />
-        <GroupCreation />
-        <ProfileManagement />
-      </div>
-    );
-  };
-  
-  export default UserSystemApp;
+  return (
+    <div className="max-w-md mx-auto py-8">
+      <nav className="mb-8">
+        <ul className="flex space-x-4">
+          <li>
+            <Link to="/app/group" className="text-indigo-600 hover:text-indigo-800 font-medium">
+              Group Creation
+            </Link>
+          </li>
+          <li>
+            <Link to="/app/profile" className="text-indigo-600 hover:text-indigo-800 font-medium">
+              Profile Management
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path="group" element={<GroupCreation />} />
+        <Route path="profile" element={<ProfileManagement />} />
+      </Routes>
+    </div>
+  );
+};
+
+export default UserSystemApp;

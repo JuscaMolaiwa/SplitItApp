@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'; // Import necessary Router components
 import UserLogin from './components/UserLogin';
 import UserRegistration from './components/UserRegistration';
-import ProfileManagement from './components/ProfileManagement';
+import UserSystemApp from './components/UserSystemApp';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication state
@@ -23,14 +23,14 @@ function App() {
               !isAuthenticated ? (
                 <>
                   <UserLogin onLoginSuccess={handleLoginSuccess} />
-                  <UserRegistration />
+                  <UserRegistration onRegisterSuccess={handleLoginSuccess} />
                 </>
               ) : (
-                <ProfileManagement />
+                <UserSystemApp />  // Show UserSystemApp after login
               )
             } 
           />
-          <Route path="/profile" element={<ProfileManagement />} />
+          <Route path="/app/*" element={<UserSystemApp />} />
         </Routes>
       </div>
     </Router>
