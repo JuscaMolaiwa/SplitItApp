@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // useNavigate hook to handle navigation
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -21,7 +23,7 @@ const UserLogin = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
+      const response = await fetch('http://127.0.0.1:5000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,8 +34,13 @@ const UserLogin = () => {
       const data = await response.json();
 
       if (response.ok) {
+         // Store token in localStorage
+        localStorage.setItem('auth_token', data.token); // Save JWT token
+        
         alert('Login successful');
+        
         // Handle redirect or login success logic
+        navigate('/profile');  // Redirecting to the Profile page
       } else {
         setErrorMessage(data.error || 'Login failed');
       }
