@@ -24,7 +24,12 @@ const GroupCreation = () => {
         };
 
         try {
-            const token = localStorage.getItem('authToken');
+            // Get the token from local storage (ensure that the user is logged in)
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                setErrorMessage('Authentication token is missing!');
+                return;
+            }
             const response = await fetch('http://127.0.0.1:5000/api/groups', {
                 method: 'POST',
                 headers: {
@@ -41,6 +46,7 @@ const GroupCreation = () => {
                 setGroupName(''); // Clear the input field
             } else {
                 setErrorMessage(data.error || 'Group creation failed');
+                console.log('Backend error details:', data.details);
             }
         } catch (error) {
             setErrorMessage(`An error occurred: ${error.message}`);
