@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import JoinGroupForm from './JoinGroupForm';
 
 // Group Creation
 const GroupCreation = () => {
@@ -95,6 +96,12 @@ const GroupCreation = () => {
             >
                 {loading ? 'Creating...' : 'Create Group'}
             </button>
+            {/* Join Group Section */}
+            <div className="mt-8">
+                <h2 className="text-2xl font-bold">Join an Existing Group</h2>
+                <JoinGroupForm />
+            </div>
+            
         </div>
     );
 };
