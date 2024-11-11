@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify # type: ignore
-from ..models import Group, GroupMember
+from ..models import Group, GroupMember, User
 from .. import db
 from .auth import get_current_user_id, login_required
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt # type: ignore
@@ -86,6 +86,11 @@ def get_groups(user_id):
     return jsonify({'groups': group_list}), 200
 
 def add_user_to_group(user_id, group_id):
+    # Check if the user is already a member of the group
+    existing_member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
+    if existing_member:
+        return existing_member 
+
     # Create a new GroupMember instance
     new_member = GroupMember(user_id=user_id, group_id=group_id)
     
@@ -96,9 +101,10 @@ def add_user_to_group(user_id, group_id):
     return new_member
 
 @bp.route('/api/groups/join', methods=['POST'])
+@login_required
 @jwt_required()
-def join_group():
-    current_user = get_jwt_identity()
+def join_group(user_id):
+    current_user_id = get_current_user_id()
     data = request.get_json()
     unique_code = data.get('unique_code')
 
@@ -106,7 +112,31 @@ def join_group():
     if not group:
         return jsonify({"error": "Group not found."}), 404
 
-    # Add user to the group (pseudo code)
-    add_user_to_group(current_user['id'], group.id)
+    add_user_to_group(current_user_id, group.id)
 
     return jsonify({"success": True, "message": "Successfully joined the group."}), 200
+
+
+@bp.route('/api/groups/members', methods=['GET'])
+@login_required
+@jwt_required()
+def get_group_members(user_id):
+    # Fetch the group to ensure it exists
+    group_id = request.args.get('group_id', type=int)
+
+    group = Group.query.get(group_id)
+    if not group:
+        return jsonify({"error": "Group not found."}), 404
+
+    # Query to get members of the group
+    members = (
+        db.session.query(User)
+        .join(GroupMember)
+        .filter(GroupMember.group_id == group_id)
+        .all()
+    )
+
+    # Create a list of member details to return
+    member_list = [{"id": member.id, "username": member.username} for member in members]
+
+    return jsonify({"members": member_list}), 200

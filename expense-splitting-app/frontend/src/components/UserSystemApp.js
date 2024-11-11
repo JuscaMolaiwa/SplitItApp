@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import GroupCreation from './GroupCreation';
 import ProfileManagement from './ProfileManagement';
-import CreateExpense from './CreateExpenses'; // Import the new component
+import CreateExpense from './CreateExpenses'; 
+
 
 const UserSystemApp = () => {
   const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
