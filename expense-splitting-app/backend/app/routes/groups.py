@@ -40,6 +40,7 @@ def create_group(user_id):
 
         return jsonify({'message': 'Group created successfully', 'group_id': group.id}), 201
     except Exception as e:
+        print(f"Error creating group: {str(e)}")  # Log the error
         return jsonify({'error': 'Failed to create group', 'details': str(e)}), 400
 
 
