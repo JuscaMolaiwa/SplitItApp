@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const ProfileManagement = () => {
   const [full_name, setName] = useState('');
   const [bio, setBio] = useState('');
-  const [profileImage, setProfileImage] = useState(''); // To store the image URL or image data
+  const [profile_image_url, setProfileImage] = useState(''); // To store the image URL or image data
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,7 +35,7 @@ const ProfileManagement = () => {
         // Prepopulate the fields with existing data
         setName(data.full_name || ''); // Use empty string if no name
         setBio(data.bio || ''); // Use empty string if no bio
-        setProfileImage(data.profile_image || ''); // Use empty string if no profile image
+        setProfileImage(data.profile_image_url || ''); // Use empty string if no profile image
     
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -65,8 +65,8 @@ const ProfileManagement = () => {
       formData.append('bio', bio);
 
       // If there's a profile image, append it to the form data
-      if (profileImage) {
-        formData.append('profile_image', profileImage); // This should be the file object or image data
+      if (profile_image_url) {
+        formData.append('profile_image', profile_image_url); // This should be the file object or image data
       }
 
       const response = await fetch('http://127.0.0.1:5000/api/profile', {
@@ -130,9 +130,9 @@ const ProfileManagement = () => {
 
       {/* Profile Image Input */}
       <div>
-        <label htmlFor="profile_image" className="block font-medium">Profile Image</label>
+        <label htmlFor="profile_image_url" className="block font-medium">Profile Image</label>
         <input
-          id="profile_image"
+          id="profile_image_url"
           type="file"
           onChange={handleImageChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
