@@ -19,6 +19,11 @@ def create_group(user_id):
     group_name = data.get('name')
     if not group_name:
         return jsonify({'error': 'Group name is required to create a group'}), 400
+    
+    # Check for duplicate group name
+    existing_group = Group.query.filter_by(name=group_name).first()
+    if existing_group:
+        return jsonify({'error': 'A group with this name already exists.'}), 409  # Conflict status code
 
     try:
         # Create a new group
