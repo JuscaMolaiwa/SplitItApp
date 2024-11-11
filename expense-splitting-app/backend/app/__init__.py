@@ -28,10 +28,11 @@ def create_app():
     migrate.init_app(app, db)
 
     # Import and register blueprints or routes
-    from .routes import auth, logout, groups, profile
+    from .routes import auth, logout, groups, profile, expenses
     app.register_blueprint(auth.bp)
     app.register_blueprint(logout.bp)
     app.register_blueprint(groups.bp)
     app.register_blueprint(profile.bp)
+    app.register_blueprint(expenses.bp)
 
     return app

@@ -23,7 +23,7 @@ def create_group(user_id):
     # Check for duplicate group name
     existing_group = Group.query.filter_by(name=group_name).first()
     if existing_group:
-        return jsonify({'error': 'A group with this name already exists.'}), 409  # Conflict status code
+        return jsonify({'error': 'A group with this name already exists.'}), 409 
 
     try:
         # Create a new group
@@ -68,7 +68,7 @@ def get_groups(user_id):
         # If the user is a member of the group or is the creator, add it to the list
         if group.id in user_group_ids or group.created_by == user_id:
             group_list.append({
-                'id': group.id,
+                'group_id': group.id,
                 'name': group.name,
                 'description': group.description,
                 'created_by': group.created_by
