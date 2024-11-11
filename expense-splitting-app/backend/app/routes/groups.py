@@ -3,6 +3,8 @@ from ..models import Group, GroupMember
 from .. import db
 from .auth import get_current_user_id, login_required
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt # type: ignore
+from flask_jwt_extended import get_jwt_identity # type: ignore
+import uuid  
 
 bp = Blueprint('groups', __name__)
 
@@ -26,10 +28,15 @@ def create_group(user_id):
         return jsonify({'error': 'A group with this name already exists.'}), 409 
 
     try:
+        
+        # Generate a unique code for the group
+        unique_code = str(uuid.uuid4())  # Generate a UUID as a unique code
+
         # Create a new group
         group = Group(
             name=group_name,
             description=data.get('description', ''),
+            unique_code=unique_code, 
             created_by=user_id
         )
         db.session.add(group)
@@ -47,8 +54,6 @@ def create_group(user_id):
     except Exception as e:
         print(f"Error creating group: {str(e)}")  # Log the error
         return jsonify({'error': 'Failed to create group', 'details': str(e)}), 400
-
-
 
 @bp.route('/api/groups', methods=['GET'])
 @login_required
@@ -71,10 +76,37 @@ def get_groups(user_id):
                 'group_id': group.id,
                 'name': group.name,
                 'description': group.description,
-                'created_by': group.created_by
+                'created_by': group.created_by,
+                'unique_code': group.unique_code
             })
 
     if not group_list:
         return jsonify({'error': 'You do not have permission to access these groups'}), 403
 
     return jsonify({'groups': group_list}), 200
+
+def add_user_to_group(user_id, group_id):
+    # Create a new GroupMember instance
+    new_member = GroupMember(user_id=user_id, group_id=group_id)
+    
+    # Add the new member to the session and commit
+    db.session.add(new_member)
+    db.session.commit()
+    
+    return new_member
+
+@bp.route('/api/groups/join', methods=['POST'])
+@jwt_required()
+def join_group():
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    unique_code = data.get('unique_code')
+
+    group = Group.query.filter_by(unique_code=unique_code).first()
+    if not group:
+        return jsonify({"error": "Group not found."}), 404
+
+    # Add user to the group (pseudo code)
+    add_user_to_group(current_user['id'], group.id)
+
+    return jsonify({"success": True, "message": "Successfully joined the group."}), 200

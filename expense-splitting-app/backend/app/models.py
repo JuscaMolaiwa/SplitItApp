@@ -18,12 +18,14 @@ class Group(db.Model):
     __tablename__ = 'groups'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    unique_code = db.Column(db.String(10), unique=True, nullable=False)  # Unique code for joining
     description = db.Column(db.Text)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationship to expenses
     expenses = db.relationship('Expense', back_populates='group')
+    members = db.relationship('User', secondary='group_members')
 
 class GroupMember(db.Model):
     __tablename__ = 'group_members'
