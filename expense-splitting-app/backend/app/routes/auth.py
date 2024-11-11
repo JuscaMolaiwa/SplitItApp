@@ -6,6 +6,7 @@ import jwt # type: ignore
 from datetime import datetime, timedelta
 from ..models import User
 from .. import db
+from flask import session, jsonify # type: ignore
 
 bp = Blueprint('auth', __name__)
 
@@ -31,7 +32,8 @@ def get_current_user_id():
     try:
         token = auth_header.split(" ")[1]
         decoded_token = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
-        return decoded_token['user_id']
+        user_id = decoded_token['sub']
+        return user_id
     except jwt.ExpiredSignatureError:
         return jsonify({'error': 'Token expired, please log in again'}), 401
     except jwt.InvalidTokenError:
@@ -56,7 +58,7 @@ def register():
         )
         db.session.add(user)
         db.session.commit()
-        return jsonify({'message': 'User  registered successfully'}), 201
+        return jsonify({'message': 'User registered successfully'}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Registration failed', 'details': str(e)}), 500
@@ -72,7 +74,7 @@ def login():
     user = User.query.filter_by(username=data['username']).first()
     if user and check_password_hash(user.password_hash, data['password']):
         token = jwt.encode({
-            'user_id': user.id,
+            'sub': user.id,
             'exp': datetime.utcnow() + timedelta(hours=24)
         }, current_app.config['SECRET_KEY'], algorithm='HS256')
         return jsonify({'token': token}), 200

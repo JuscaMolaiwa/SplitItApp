@@ -2,11 +2,13 @@ from flask import Blueprint, request, jsonify # type: ignore
 from ..models import Group, GroupMember
 from .. import db
 from .auth import get_current_user_id, login_required
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt # type: ignore
 
 bp = Blueprint('groups', __name__)
 
 @bp.route('/api/groups', methods=['POST'])
 @login_required
+@jwt_required()
 def create_group(user_id):
     
     user_id = get_current_user_id()  # Get the current logged-in user's ID
@@ -44,6 +46,7 @@ def create_group(user_id):
 
 @bp.route('/api/groups', methods=['GET'])
 @login_required
+@jwt_required()
 def get_groups(user_id):
 
     user_id = get_current_user_id()

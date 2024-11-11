@@ -4,6 +4,7 @@ from ..models import User
 from .. import db
 from .auth import get_current_user_id, login_required
 from werkzeug.utils import secure_filename # type: ignore
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt # type: ignore
 
 bp = Blueprint('profile', __name__)
 
@@ -17,6 +18,7 @@ def uploaded_file(filename):
 
 @bp.route('/api/profile', methods=['GET'])  
 @login_required
+@jwt_required()
 def get_profile(user_id):
     current_user_id = get_current_user_id()  
 
