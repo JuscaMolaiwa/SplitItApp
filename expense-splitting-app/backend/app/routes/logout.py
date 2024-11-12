@@ -19,4 +19,5 @@ def logout():
         blacklist.add(jti)  # Add the token's jti to the blacklist
         return jsonify({'message': 'Logged out successfully'}), 200
     except Exception as e:
+        print(f"Logout error: {e}")  # Log the error
         return jsonify({'error': 'Failed to log out', 'details': str(e)}), 400

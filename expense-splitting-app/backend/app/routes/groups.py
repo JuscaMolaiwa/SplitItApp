@@ -137,6 +137,6 @@ def get_group_members(user_id):
     )
 
     # Create a list of member details to return
-    member_list = [{"id": member.id, "username": member.username} for member in members]
+    member_list = [{"id": member.id, "username": member.username, "full_name": member.full_name} for member in members]
 
-    return jsonify({"members": member_list}), 200
+    return jsonify({"group_id": group_id, "members": member_list}), 200
