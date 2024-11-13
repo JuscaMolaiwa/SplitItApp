@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import GroupCreation from './GroupCreation';
 import ProfileManagement from './ProfileManagement';
-import CreateExpense from './CreateExpenses'; 
-
+import CreateExpense from './CreateExpenses';
+import GroupMembers from './GroupMembers'; 
+import ExpenseManager from './ExpenseManager';
 
 const UserSystemApp = () => {
   const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const handleGroupCreation = (groupId) => {
     setActiveGroupId(groupId); // Set the active group when created
@@ -15,6 +17,9 @@ const UserSystemApp = () => {
   const handleExpenseCreated = () => {
     // Logic to handle after an expense is created, e.g., refresh data
     console.log('Expense has been created!');
+  };
+  const handleLogout = () => {
+    setIsAuthenticated(false); // Update authentication state
   };
 
   return (
@@ -42,7 +47,11 @@ const UserSystemApp = () => {
         <Route path="group" element={<GroupCreation onGroupCreation={handleGroupCreation} />} />
         <Route path="profile" element={<ProfileManagement />} />
         <Route path="create-expense" element={<CreateExpense groupId={activeGroupId} onExpenseCreated={handleExpenseCreated} />} />
+        <Route path="/groups/:groupId/members" element={<GroupMembers />} />
       </Routes>
+      <h1>My Group Expense Tracker</h1>
+            {/* Pass in the groupId of the group you're managing */}
+            <ExpenseManager groupId={1} />
     </div>
   );
 };

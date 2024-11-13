@@ -1,17 +1,10 @@
 import logging
-import os
 from flask import Blueprint, request, jsonify # type: ignore
-from ..models import GroupMember, User, Expense  # Ensure Expense is imported
-from .. import db
+from ..services.expense_service import ExpenseService  # Import the ExpenseService
 from .auth import get_current_user_id, login_required
 from flask_jwt_extended import jwt_required # type: ignore
 
 bp = Blueprint('expenses', __name__)
-
-def get_user_groups(user_id):
-        # Query the groups the user belongs to through GroupMember
-        return GroupMember.query.filter_by(user_id=user_id).all()
-
 
 @bp.route('/api/expenses', methods=['POST'])
 @login_required
@@ -26,47 +19,16 @@ def add_expense(user_id):
     description = data.get('description')
     group_id = data.get('group_id')  # Expect group_id in the request
 
-    # Validate required fields
-    if amount is None or group_id is None:
-        return jsonify({'error': 'Amount, category, and group are required.'}), 400
-    
     try:
-        amount = float(amount)  # Convert amount to float
-    except (ValueError, TypeError):
-        return jsonify({"error": "Invalid amount. Must be a number."}), 422
-    
-    # Validate amount
-    if amount <= 0:
-        return jsonify({'error': 'Amount must be greater than 0.'}), 400
-    
-    # Get user's active groups
-    user_groups = get_user_groups(user_id)
-
-    # Check if the user has any active groups
-    if not user_groups:
-        return jsonify({"error": "User has no active groups."}), 403
-
-    # Check if the user is a member of the group
-    is_member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
-    if not is_member:
-        return jsonify({'error': 'User is not part of the selected group.'}), 403
-
-    try:
-        # Create a new expense
-        expense = Expense(
-            amount=amount,
-            description=description,
-            group_id=group_id,
-            user_id=user_id  # Add user_id to associate with the expense
-        )
-        db.session.add(expense)
-        db.session.commit()
-        
+        expense = ExpenseService.add_expense(user_id, amount, description, group_id)
         return jsonify({'message': 'Expense added successfully', 'expense_id': expense.id}), 201
+    except ValueError as ve:
+        return jsonify({'error': str(ve)}), 400
+    except PermissionError as pe:
+        return jsonify({'error': str(pe)}), 403
     except Exception as e:
-        db.session.rollback()  # Rollback session in case of error
+        logging.error(f"Failed to add expense: {str(e)}")  # Log the error
         return jsonify({'error': 'Failed to add expense', 'details': str(e)}), 400
-    
 
 @bp.route('/api/expenses', methods=['GET'])
 @login_required
@@ -82,15 +44,8 @@ def get_expenses(user_id):
 
     group_id = int(group_id)  # Convert to integer after validation
 
-    # Check if the user belongs to the group
-    is_member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
-    if not is_member:
-        return jsonify({'error': 'User is not part of the selected group.'}), 403
-
     try:
-        # Query the expenses for the group
-        expenses = Expense.query.filter_by(group_id=group_id).all()
-
+        expenses = ExpenseService.get_expenses(user_id, group_id)
         if not expenses:
             return jsonify({'message': 'No expenses found for this group.'}), 404
         
@@ -105,6 +60,8 @@ def get_expenses(user_id):
 
         return jsonify({'expenses': expenses_data, 'total_expenses': len(expenses)}), 200
 
+    except PermissionError as perm:
+        return jsonify ({'error': str(perm)}), 403
     except Exception as e:
         logging.error(f"Failed to retrieve expenses: {str(e)}")  # Log the error
         return jsonify({'error': 'Failed to retrieve expenses', 'details': str(e)}), 400

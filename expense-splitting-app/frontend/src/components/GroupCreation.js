@@ -8,6 +8,7 @@ const GroupCreation = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [groupId, setGroupId] = useState(null); // Store groupId here
 
     const handleGroupCreation = async () => {
         if (!groupName) {
@@ -19,7 +20,7 @@ const GroupCreation = () => {
         setErrorMessage('');
         setSuccessMessage('');
 
-        const groupData = {
+        const groupData = { 
             name: groupName,
             description: groupDescription
         };
@@ -29,6 +30,7 @@ const GroupCreation = () => {
             const token = localStorage.getItem('auth_token');
             if (!token) {
                 setErrorMessage('Authentication token is missing!');
+                setLoading(false); // reset loading if no token
                 return;
             }
             const response = await fetch('http://127.0.0.1:5000/api/groups', {
@@ -44,7 +46,12 @@ const GroupCreation = () => {
 
             if (response.ok) {
                 setSuccessMessage('Group created successfully!');
+                setGroupId(data.id); // Save the groupId from the response
                 setGroupName(''); // Clear the input field
+                
+                // Optionally, store groupId in localStorage for global access
+                localStorage.setItem('group_id', data.id); 
+                
             } else {
                 setErrorMessage(data.error || 'Group creation failed');
                 console.log('Backend error details:', data.details);
@@ -96,12 +103,18 @@ const GroupCreation = () => {
             >
                 {loading ? 'Creating...' : 'Create Group'}
             </button>
+            {/* Display the groupId if it's available */}
+            {groupId && (
+                <div className="mt-4 text-blue-500">
+                    Group ID: {groupId} (Save this for future operations)
+                </div>
+            )}
+
             {/* Join Group Section */}
             <div className="mt-8">
                 <h2 className="text-2xl font-bold">Join an Existing Group</h2>
                 <JoinGroupForm />
             </div>
-            
         </div>
     );
 };
