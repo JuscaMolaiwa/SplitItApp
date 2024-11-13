@@ -43,3 +43,34 @@ class UserService:
             'exp': datetime.utcnow() + timedelta(hours=24)
         }, current_app.config['SECRET_KEY'], algorithm='HS256')
         return token
+    
+    @staticmethod
+    def get_user_by_id(user_id):
+        """Retrieve user information by user ID."""
+        user = User.query.get(user_id)
+        if not user:
+            return None  # User not found
+
+        # Return user information, excluding sensitive data
+        return {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'full_name': user.full_name,
+            'profile_image': user.profile_image
+    }
+
+    @staticmethod
+    def get_all_users():
+        """Retrieve all users from the database."""
+        users = User.query.all()  # Fetch all users from the database
+        return [
+            {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'full_name': user.full_name,
+                'profile_image': user.profile_image
+            }
+            for user in users
+        ]

@@ -58,3 +58,22 @@ def login():
         token = UserService.generate_jwt_token(user.id)
         return jsonify({'token': token}), 200
     return jsonify({'error': 'Invalid credentials'}), 401
+
+
+#Get a specific users
+@bp.route('/api/user', methods=['GET'])
+@login_required  # Ensure the user is logged in
+def get_user(user_id):
+    user_info = UserService.get_user_by_id(user_id)  # Call the static method
+    if not user_info:
+        return jsonify({'error': 'User  not found'}), 404
+
+    return jsonify({"user": user_info}), 200
+
+#Get all the users
+@bp.route('/api/users', methods=['GET'])
+@login_required  # Ensure the user is logged in
+def get_users(user_id):
+    users = UserService.get_all_users()  # Call the service method to get all users
+    return jsonify({'users': users}), 200
+
