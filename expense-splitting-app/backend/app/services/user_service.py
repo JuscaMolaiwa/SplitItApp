@@ -20,7 +20,8 @@ class UserService:
                 email=email,
                 password_hash=generate_password_hash(password),
                 full_name=full_name,
-                profile_image=profile_image
+                profile_image=profile_image,
+                role='user'  # Set the default role to 'user'
             )
             db.session.add(user)
             db.session.commit()
@@ -37,9 +38,10 @@ class UserService:
         return None
 
     @staticmethod
-    def generate_jwt_token(user_id):
+    def generate_jwt_token(user_id, role):
         token = jwt.encode({
             'sub': user_id,
+            'role': role,
             'exp': datetime.utcnow() + timedelta(hours=24)
         }, current_app.config['SECRET_KEY'], algorithm='HS256')
         return token
@@ -67,6 +69,7 @@ class UserService:
         return [
             {
                 'id': user.id,
+                'role': user.role,
                 'username': user.username,
                 'email': user.email,
                 'full_name': user.full_name,
@@ -74,3 +77,5 @@ class UserService:
             }
             for user in users
         ]
+    
+    

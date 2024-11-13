@@ -13,6 +13,7 @@ class User(db.Model):
     profile_image = db.Column(db.String(255))
     bio = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    role = db.Column(db.String(50), default='user')
 
 class Group(db.Model):
     __tablename__ = 'groups'
