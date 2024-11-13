@@ -29,12 +29,14 @@ def create_app():
     migrate.init_app(app, db)
 
     # Import and register blueprints or routes
-    from .routes import auth, logout, groups, profile, expenses
+    from .routes import auth, logout, groups, profile, expenses, user, admin
     app.register_blueprint(auth.bp)
     app.register_blueprint(logout.bp)
     app.register_blueprint(groups.bp)
     app.register_blueprint(profile.bp)
     app.register_blueprint(expenses.bp)
+    app.register_blueprint(user.bp)
+    app.register_blueprint(admin.bp)
 
     @app.errorhandler(Exception)
     def handle_exception(e):

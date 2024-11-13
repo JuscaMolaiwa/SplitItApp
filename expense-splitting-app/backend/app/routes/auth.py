@@ -30,6 +30,25 @@ def login_required(f):
         return f(user_id=user_id, *args, **kwargs)
     return decorated_function
 
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return jsonify({'error': 'Authentication required'}), 401
+
+        try:
+            token = auth_header.split(" ")[1]
+            decoded_token = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
+            if decoded_token.get('role') != 'admin':
+                return jsonify({'error': 'Admin access required'}), 403
+        except jwt.ExpiredSignatureError:
+            return jsonify({'error': 'Token expired, please log in again'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'error': 'Invalid token, please log in again'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 @bp.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -55,25 +74,6 @@ def login():
 
     user = UserService.authenticate_user(data['username'], data['password'])
     if user:
-        token = UserService.generate_jwt_token(user.id)
+        token = UserService.generate_jwt_token(user.id, user.role)
         return jsonify({'token': token}), 200
     return jsonify({'error': 'Invalid credentials'}), 401
-
-
-#Get a specific users
-@bp.route('/api/user', methods=['GET'])
-@login_required  # Ensure the user is logged in
-def get_user(user_id):
-    user_info = UserService.get_user_by_id(user_id)  # Call the static method
-    if not user_info:
-        return jsonify({'error': 'User  not found'}), 404
-
-    return jsonify({"user": user_info}), 200
-
-#Get all the users
-@bp.route('/api/users', methods=['GET'])
-@login_required  # Ensure the user is logged in
-def get_users(user_id):
-    users = UserService.get_all_users()  # Call the service method to get all users
-    return jsonify({'users': users}), 200
-
