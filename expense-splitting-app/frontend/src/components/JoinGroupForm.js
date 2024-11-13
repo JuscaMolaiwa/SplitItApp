@@ -5,7 +5,7 @@ const JoinGroupForm = () => {
     const [uniqueCode, setUniqueCode] = useState('');
     const [message, setMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [error, setError] = useState(null);
+    const [setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [joinedGroups, setJoinedGroups] = useState([]); // State for joined groups
 
@@ -115,7 +115,7 @@ const JoinGroupForm = () => {
                         <li key={group.group_id}>
                             <strong>{group.name}</strong>: {group.description}
                             {/* Link to view members */}
-                            <Link to={`/groups/${group.group_id}/members`}>View Members</Link>
+                            <Link to={`groups/members?=${group.group_id}`}>View Members</Link>
                         </li>
                     ))}
                 </ul>

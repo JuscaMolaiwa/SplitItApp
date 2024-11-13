@@ -1,4 +1,5 @@
 from flask import Flask # type: ignore
+from flask import Flask, jsonify # type: ignore
 from flask_sqlalchemy import SQLAlchemy # type: ignore
 from flask_migrate import Migrate # type: ignore
 from flask_cors import CORS # type: ignore
@@ -35,4 +36,13 @@ def create_app():
     app.register_blueprint(profile.bp)
     app.register_blueprint(expenses.bp)
 
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        """Handle all exceptions and return a JSON response."""
+        response = {
+            "error": str(e),
+            "message": "An unexpected error occurred."
+        }
+        return jsonify(response), 500
+    
     return app
