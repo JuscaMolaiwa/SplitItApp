@@ -2,6 +2,7 @@ from functools import wraps
 from flask import Blueprint, request, jsonify, current_app # type: ignore
 from ..services.user_service import UserService  # Import the UserService
 import jwt # type: ignore
+from sqlalchemy.exc import IntegrityError  # type: ignore
 
 bp = Blueprint('auth', __name__)
 
@@ -52,6 +53,11 @@ def admin_required(f):
 @bp.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
+
+    # Ensure required fields are present
+    if not all(key in data for key in ('username', 'email', 'password')):
+        return jsonify({'error': 'Missing required fields: username, email, and password'}), 400
+    
     try:
         user = UserService.register_user(
             username=data['username'],
