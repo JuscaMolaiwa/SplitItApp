@@ -51,6 +51,7 @@ const UserRegistration = ({onRegisterSuccess}) => {
       const data = await response.json();
 
       if (response.ok) {
+        sessionStorage.setItem('auth_token', data.token);
         onRegisterSuccess();
         
         alert('User registered successfully');
