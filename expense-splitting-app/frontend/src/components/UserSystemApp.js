@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Routes, Route } from 'react-router-dom';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom'; // useNavigate hook is now here
 import GroupCreation from './GroupCreation';
 import ProfileManagement from './ProfileManagement';
 import CreateExpense from './CreateExpenses';
@@ -8,18 +8,21 @@ import ExpenseManager from './ExpenseManager';
 
 const UserSystemApp = () => {
   const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const navigate = useNavigate(); // To navigate after logout
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token');
+    sessionStorage.removeItem('auth_token'); 
+    navigate('/'); // Redirect to the login page after logging out
+  };
 
   const handleGroupCreation = (groupId) => {
     setActiveGroupId(groupId); // Set the active group when created
   };
 
   const handleExpenseCreated = () => {
-    // Logic to handle after an expense is created, e.g., refresh data
     console.log('Expense has been created!');
-  };
-  const handleLogout = () => {
-    setIsAuthenticated(false); // Update authentication state
   };
 
   return (
@@ -42,6 +45,7 @@ const UserSystemApp = () => {
             </Link>
           </li>
         </ul>
+        <button onClick={handleLogout} className="mt-4 text-red-600">Logout</button>
       </nav>
       <Routes>
         <Route path="group" element={<GroupCreation onGroupCreation={handleGroupCreation} />} />
@@ -50,8 +54,7 @@ const UserSystemApp = () => {
         <Route path="/groups/:groupId/members" element={<GroupMembers />} />
       </Routes>
       <h1>My Group Expense Tracker</h1>
-            {/* Pass in the groupId of the group you're managing */}
-            <ExpenseManager groupId={1} />
+      <ExpenseManager groupId={1} />
     </div>
   );
 };

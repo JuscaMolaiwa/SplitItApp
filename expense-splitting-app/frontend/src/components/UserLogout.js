@@ -11,7 +11,7 @@ const UserLogout = ({ onLogout }) => {
     setErrorMessage('');
 
     try {
-      const token = localStorage.getItem('auth_token');  // Get the token to send in the request (if needed for API-based logout)
+      const token = localStorage.getItem('auth_token') && sessionStorage.getItem('auth_token');  // Get the token to send in the request (if needed for API-based logout)
       if (!token) {
         setErrorMessage('You are not logged in!');
         return;

@@ -9,7 +9,7 @@ const GroupMembers = () => {
 
     useEffect(() => {
         const fetchMembers = async () => {
-            const token = localStorage.getItem('auth_token');
+            const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
             if (!token) {
                 setErrorMessage('Authentication token is missing!');
                 setLoading(false); // Stop loading

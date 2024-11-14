@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const ProfileManagement = () => {
   const [full_name, setName] = useState('');
@@ -6,6 +7,7 @@ const ProfileManagement = () => {
   const [profile_image_url, setProfileImage] = useState(''); // To store the image URL or image data
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Hook for navigation
 
   // Fetch existing profile data when the component mounts
   useEffect(() => {
