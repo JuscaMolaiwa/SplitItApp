@@ -21,6 +21,10 @@ function App() {
   const handleLoginSuccess = () => {
     setIsAuthenticated(true); // User has logged in
   };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false); // Update the authentication state
+  };
   
   return (
     <Router>
@@ -42,7 +46,7 @@ function App() {
           />
           <Route 
             path="/app/*" 
-            element={isAuthenticated ? <UserSystemApp /> : <Navigate to="/" />} // Redirect to login if not authenticated
+            element={isAuthenticated ? <UserSystemApp onLogout={handleLogout} /> : <Navigate to="/" />} // Redirect to login if not authenticated
           />
         </Routes>
       </div>

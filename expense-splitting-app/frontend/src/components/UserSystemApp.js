@@ -6,7 +6,7 @@ import CreateExpense from './CreateExpenses';
 import GroupMembers from './GroupMembers'; 
 import ExpenseManager from './ExpenseManager';
 
-const UserSystemApp = () => {
+const UserSystemApp = ({ onLogout}) => {
   const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
   const navigate = useNavigate(); // To navigate after logout
 
@@ -14,6 +14,7 @@ const UserSystemApp = () => {
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
     sessionStorage.removeItem('auth_token'); 
+    onLogout();
     navigate('/'); // Redirect to the login page after logging out
   };
 
