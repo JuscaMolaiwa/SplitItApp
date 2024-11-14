@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UserLogin = () => {
+const UserLogin = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -42,7 +42,9 @@ const UserLogin = () => {
         } else {
           sessionStorage.setItem('auth_token', data.token); // Save token in sessionStorage for session-only for hours
         }
-        
+
+        onLoginSuccess();
+
         alert('Login successful');
         
         // Handle redirect or login success logic
