@@ -7,16 +7,18 @@ const UserLogin = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // useNavigate hook to handle navigation
+  const [rememberMe, setRememberMe] = useState(false); // State for remember me checkbox
 
   const handleLogin = async () => {
     if (!username || !password) {
       setErrorMessage('Both username and password are required.');
       return;
     }
-
+  
     const userData = {
       username,
       password,
+      remember_me: rememberMe, 
     };
 
     setLoading(true);
@@ -34,8 +36,12 @@ const UserLogin = () => {
       const data = await response.json();
 
       if (response.ok) {
-         // Store token in localStorage
-        localStorage.setItem('auth_token', data.token); // Save JWT token
+        // Store token based on rememberMe
+        if (rememberMe) {
+          localStorage.setItem('auth_token', data.token); // Save token in localStorage for persistent session for certain days
+        } else {
+          sessionStorage.setItem('auth_token', data.token); // Save token in sessionStorage for session-only for hours
+        }
         
         alert('Login successful');
         
@@ -82,6 +88,20 @@ const UserLogin = () => {
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
       </div>
+
+      <div>
+        <label htmlFor="remember-me" className="inline-flex items-center">
+          <input
+            type="checkbox"
+            id="remember-me"
+            checked={rememberMe}
+            onChange={() => setRememberMe(!rememberMe)} // Toggle remember me state
+            className="mr-2"
+          />
+          Remember Me
+        </label>
+      </div>
+
 
       <button
         onClick={handleLogin}
