@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FaUsers } from 'react-icons/fa';
+import { FaCog } from 'react-icons/fa'
+
 
 const JoinGroupForm = () => {
     const [uniqueCode, setUniqueCode] = useState('');
@@ -94,7 +97,6 @@ const JoinGroupForm = () => {
 
     return (
         <div>
-
         <form onSubmit={handleJoinGroup}>
             <input
                 type="text"
@@ -109,17 +111,37 @@ const JoinGroupForm = () => {
             {message && <div>{message}</div>}
             {errorMessage && <div>{errorMessage}</div>}
         </form>
-        <h2>Groups Joined:</h2>
+        
+        <h2 className="text-lg font-semibold mb-4">Groups Joined:</h2>
+        
             {joinedGroups.length > 0 ? (
-                <ul>
-                    {joinedGroups.map((group) => (
-                        <li key={group.group_id}>
-                            <strong>{group.name}</strong>: {group.description}
-                            {/* Link to view members */}
-                            <Link to={`groups/members?=${group.group_id}`}>View Members</Link>
-                        </li>
-                    ))}
-                </ul>
+                <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-lg">
+                    <thead>
+                        <tr>
+                            <th className="px-4 py-2 border-b border-gray-300 bg-gray-100 text-left">Group Name <FaUsers className="text-indigo-600 mr-2" size={16} /></th>
+                            <th className="px-4 py-2 border-b border-gray-300 bg-gray-100 text-left"><div className="flex items-center"><span>Description</span> </div></th>
+                            <th className="px-4 py-2 border-b border-gray-300 bg-gray-100 text-left">Actions <FaCog className="text-indigo-600 mr-2" size={11}/></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {joinedGroups.map((group) => (
+                            <tr key={group.group_id} className="border-b border-gray-200 hover:bg-gray-50">
+                                <td className="px-4 py-3 border-gray-300">{group.name}</td>
+                                <td className="px-4 py-3 border-gray-300">
+                                    {group.description || 'No description provided'}
+                                </td>
+                                <td className="px-4 py-3 border-gray-300">
+                                    <Link
+                                        to={`groups/members?group_id=${group.group_id}`}
+                                        className="text-indigo-600 hover:text-indigo-800 font-medium"
+                                    >
+                                        View Members
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             ) : (
                 <div>No groups joined yet.</div>
             )}
