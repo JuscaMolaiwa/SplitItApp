@@ -92,9 +92,9 @@ class UserService:
     def generate_jwt_token(user_id, role, remember_me=False):
         # Set expiration time based on remember_me
         if remember_me:
-            expiration_time = datetime.utcnow() + timedelta(days=7)  # 30 days
+            expiration_time = datetime.utcnow() + timedelta(days=7)  # 7 days
         else:
-            expiration_time = datetime.utcnow() + timedelta(hours=24)  # 1 hour
+            expiration_time = datetime.utcnow() + timedelta(hours=24)  # 1 day
 
         token = jwt.encode({
             'sub': user_id,
