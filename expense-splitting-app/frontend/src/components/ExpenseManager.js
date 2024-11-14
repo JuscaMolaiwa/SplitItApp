@@ -23,7 +23,8 @@ const ExpenseManager = () => {
     }, [groupId]); // This effect runs when groupId changes
 
     const fetchExpenses = async () => {
-        const token = localStorage.getItem('auth_token');
+        
+        const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
         if (!token) {
             setError('Authentication token is missing!');
             return;

@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'; // Import necessary Router components
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import UserLogin from './components/UserLogin';
 import UserRegistration from './components/UserRegistration';
 import UserSystemApp from './components/UserSystemApp';
 
-
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication state
 
-  // Handle login success and redirect
+  // Check if user is authenticated based on token in localStorage or sessionStorage
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    if (token) {
+      setIsAuthenticated(true); // Set the state if a token is present
+    } else {
+      setIsAuthenticated(false); // Set the state to false if no token is found
+    }
+  }, []); // Only run once on initial render
+
+  // Handle login success
   const handleLoginSuccess = () => {
     setIsAuthenticated(true); // User has logged in
   };
-
+  
   return (
     <Router>
       <div>
@@ -27,11 +36,14 @@ function App() {
                   <UserRegistration onRegisterSuccess={handleLoginSuccess} />
                 </>
               ) : (
-                <UserSystemApp />  // Show UserSystemApp after login
+                <Navigate to="/app" /> // Redirect to app page if authenticated
               )
             } 
           />
-          <Route path="/app/*" element={<UserSystemApp />} />
+          <Route 
+            path="/app/*" 
+            element={isAuthenticated ? <UserSystemApp /> : <Navigate to="/" />} // Redirect to login if not authenticated
+          />
         </Routes>
       </div>
     </Router>
