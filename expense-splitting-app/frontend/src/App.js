@@ -10,15 +10,10 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check if auth token exists in localStorage when the app loads
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
+    // Check for token in both localStorage and sessionStorage
+    const token = localStorage.getItem("auth_token") || sessionStorage.getItem("auth_token");
+    setIsAuthenticated(!!token); // Set isAuthenticated based on token presence
   }, []);
-
   
 
   const handleLoginSuccess = () => {
