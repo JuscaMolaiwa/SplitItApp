@@ -25,6 +25,7 @@ const ExpenseManager = () => {
     const fetchExpenses = async () => {
         
         const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+
         if (!token) {
             setError('Authentication token is missing!');
             return;
@@ -48,7 +49,8 @@ const ExpenseManager = () => {
     };
 
     const fetchGroupMembers = async () => {
-        const token = localStorage.getItem('auth_token');
+        
+        const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
         if (!token) {
             setError('Authentication token is missing!');
             return;
@@ -99,7 +101,6 @@ const ExpenseManager = () => {
     return (
         <div>
             <h2>Expense Manager</h2>
-            <CreateExpense groupId={groupId} onExpenseCreated={fetchExpenses} />
             <GroupMembers groupId={groupId} />
             <h3>Group Balances</h3>
             {error && <p className="text-red-500">{error}</p>}

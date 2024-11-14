@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Link, Routes, Route, useNavigate } from 'react-router-dom'; // useNavigate hook is now here
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
 import GroupCreation from './GroupCreation';
 import ProfileManagement from './ProfileManagement';
 import CreateExpense from './CreateExpenses';
 import GroupMembers from './GroupMembers'; 
 import ExpenseManager from './ExpenseManager';
 
-const UserSystemApp = ({ onLogout}) => {
+const UserSystemApp = ({ onLogout }) => {
   const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
+  const [showExpenseManager, setShowExpenseManager] = useState(false); // State to control ExpenseManager visibility
   const navigate = useNavigate(); // To navigate after logout
 
   // Handle logout
@@ -26,13 +27,21 @@ const UserSystemApp = ({ onLogout}) => {
     console.log('Expense has been created!');
   };
 
+  const handleCreateExpenseClick = () => {
+    setShowExpenseManager(true); // Show ExpenseManager when Create Expense is clicked
+  };
+
+  const handleExpenseManagerClose = () => {
+    setShowExpenseManager(false); // Hide ExpenseManager
+  };
+
   return (
     <div className="max-w-md mx-auto py-8">
       <nav className="mb-8">
         <ul className="flex space-x-4">
           <li>
             <Link to="/app/group" className="text-indigo-600 hover:text-indigo-800 font-medium">
-              Group Creation
+              Group Management
             </Link>
           </li>
           <li>
@@ -41,8 +50,12 @@ const UserSystemApp = ({ onLogout}) => {
             </Link>
           </li>
           <li>
-            <Link to="/app/create-expense" className="text-indigo-600 hover:text-indigo-800 font-medium">
-              Create Expense
+            <Link 
+              to="/app/create-expense" 
+              className="text-indigo-600 hover:text-indigo-800 font-medium"
+              onClick={handleCreateExpenseClick} // Show ExpenseManager when clicked
+            >
+              Expenses
             </Link>
           </li>
         </ul>
@@ -51,11 +64,19 @@ const UserSystemApp = ({ onLogout}) => {
       <Routes>
         <Route path="group" element={<GroupCreation onGroupCreation={handleGroupCreation} />} />
         <Route path="profile" element={<ProfileManagement />} />
-        <Route path="create-expense" element={<CreateExpense groupId={activeGroupId} onExpenseCreated={handleExpenseCreated} />} />
+        <Route 
+          path="create-expense" 
+          element={
+            <>
+              <CreateExpense groupId={activeGroupId} onExpenseCreated={handleExpenseCreated} />
+              {showExpenseManager && (
+                <ExpenseManager groupId={activeGroupId} onClose={handleExpenseManagerClose} />
+              )}
+            </>
+          } 
+        />
         <Route path="/groups/:groupId/members" element={<GroupMembers />} />
       </Routes>
-      <h1>My Group Expense Tracker</h1>
-      <ExpenseManager groupId={1} />
     </div>
   );
 };

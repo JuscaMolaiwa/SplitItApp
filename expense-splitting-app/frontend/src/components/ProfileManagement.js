@@ -12,7 +12,8 @@ const ProfileManagement = () => {
     const fetchProfile = async () => {
       try {
         // Get the token from local storage (ensure that the user is logged in)
-        const token = localStorage.getItem('auth_token');
+        const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+
         if (!token) {
           setError('Authentication token is missing!');
           return;
@@ -53,7 +54,7 @@ const ProfileManagement = () => {
       setError(null); // Reset error on each update attempt
 
       // Get the token from local storage (ensure that the user is logged in)
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
       if (!token) {
         setError('Authentication token is missing!');
         return;
