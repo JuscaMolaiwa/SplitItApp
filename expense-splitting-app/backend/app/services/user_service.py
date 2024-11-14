@@ -9,7 +9,6 @@ from sqlalchemy.exc import IntegrityError  # type: ignore # For specific excepti
 
 class UserService:
 
-
     #Email validation method
     @staticmethod
     def validate_email(email):
@@ -90,12 +89,19 @@ class UserService:
         return None
 
     @staticmethod
-    def generate_jwt_token(user_id, role):
+    def generate_jwt_token(user_id, role, remember_me=False):
+        # Set expiration time based on remember_me
+        if remember_me:
+            expiration_time = datetime.utcnow() + timedelta(days=7)  # 30 days
+        else:
+            expiration_time = datetime.utcnow() + timedelta(hours=24)  # 1 hour
+
         token = jwt.encode({
             'sub': user_id,
             'role': role,
-            'exp': datetime.utcnow() + timedelta(hours=24)
+            'exp': expiration_time
         }, current_app.config['SECRET_KEY'], algorithm='HS256')
+
         return token
     
     @staticmethod
@@ -108,6 +114,7 @@ class UserService:
         # Return user information, excluding sensitive data
         return {
             'id': user.id,
+            'role': user.role,
             'username': user.username,
             'email': user.email,
             'full_name': user.full_name,
