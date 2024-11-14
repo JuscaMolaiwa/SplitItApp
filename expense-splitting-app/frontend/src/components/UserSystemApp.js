@@ -13,7 +13,7 @@ const UserSystemApp = ({ onLogout}) => {
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
-    sessionStorage.removeItem('auth_token'); 
+    sessionStorage.removeItem('auth_token');
     onLogout();
     navigate('/'); // Redirect to the login page after logging out
   };
