@@ -10,7 +10,7 @@ const JoinGroupForm = () => {
     const [joinedGroups, setJoinedGroups] = useState([]); // State for joined groups
 
     const fetchJoinedGroups = async () => {
-        const token = localStorage.getItem('auth_token');
+        const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
         if (!token) {
             setErrorMessage('Authentication token is missing!');
             return;
@@ -18,7 +18,7 @@ const JoinGroupForm = () => {
 
         try {
             // Get the token from local storage (ensure that the user is logged in)
-            const token = localStorage.getItem('auth_token');
+            const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
             if (!token) {
             setError('Authentication token is missing!');
             return;
@@ -56,7 +56,8 @@ const JoinGroupForm = () => {
             setLoading(true); // Indicate loading state
             setError(null);
             // Get the token from local storage (ensure that the user is logged in)
-            const token = localStorage.getItem('auth_token');
+            const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+
             if (!token) {
             setError('Authentication token is missing!');
             return;
