@@ -9,6 +9,7 @@ const UserRegistration = ({onRegisterSuccess}) => {
   const [profileImage, setProfileImage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false); 
 
   const navigate = useNavigate(); // Initialize navigate for redirection
 
@@ -51,13 +52,16 @@ const UserRegistration = ({onRegisterSuccess}) => {
       const data = await response.json();
 
       if (response.ok) {
-        sessionStorage.setItem('auth_token', data.token);
-        onRegisterSuccess();
         
-        alert('User registered successfully');
-
-        //redirect the user to the main app
-        navigate('/app');  // '/' is the route for UserSystemApp
+      // Store token in either localStorage or sessionStorage
+      if (rememberMe) {
+        localStorage.setItem('auth_token', data.token);
+      } else {
+        sessionStorage.setItem('auth_token', data.token);
+      }
+      onRegisterSuccess();
+        
+      alert('User registered successfully');
 
       } else {
         setErrorMessage(data.error || 'Registration failed');
