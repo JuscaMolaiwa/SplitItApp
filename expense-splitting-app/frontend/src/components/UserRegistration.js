@@ -131,7 +131,7 @@ const UserRegistration = ({onRegisterSuccess}) => {
 
       <div>
         <label htmlFor="profile_image" className="block font-medium">
-          Profile Image URL (Optional)
+          Profile Image (Optional)
         </label>
         <input
           id="profile_image"
