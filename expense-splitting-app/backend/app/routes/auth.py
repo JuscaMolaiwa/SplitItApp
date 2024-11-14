@@ -67,7 +67,7 @@ def register():
             full_name=data.get('full_name', ''),
             profile_image=data.get('profile_image', '')
         )
-        return jsonify({'message': 'User  registered successfully'}), 201
+        return jsonify({'message': 'User registered successfully'}), 201
     except ValueError as ve:
         return jsonify({'error': str(ve)}), 409
     except Exception as e:
