@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UserRegistration = () => {
+const UserRegistration = ({onRegisterSuccess}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -51,10 +51,13 @@ const UserRegistration = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert('User registered successfully');
+        onRegisterSuccess();
         
-      //redirect the user to the main app
-      navigate('/app');  // '/' is the route for UserSystemApp
+        alert('User registered successfully');
+
+        //redirect the user to the main app
+        navigate('/app');  // '/' is the route for UserSystemApp
+
       } else {
         setErrorMessage(data.error || 'Registration failed');
       }
