@@ -1,31 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import UserLogin from './components/UserLogin';
 import UserRegistration from './components/UserRegistration';
 import UserSystemApp from './components/UserSystemApp';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check if user is authenticated based on token in localStorage or sessionStorage
-  useEffect(() => {
-    const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
-    if (token) {
-      setIsAuthenticated(true); // Set the state if a token is present
-    } else {
-      setIsAuthenticated(false); // Set the state to false if no token is found
-    }
-  }, []); // Only run once on initial render
-
-  // Handle login success
   const handleLoginSuccess = () => {
-    setIsAuthenticated(true); // User has logged in
+    setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false); // Update the authentication state
+    localStorage.removeItem('auth_token');
+    sessionStorage.removeItem('auth_token');
+    setIsAuthenticated(false);
   };
-  
+
   return (
     <Router>
       <div>
@@ -35,18 +26,35 @@ function App() {
             path="/" 
             element={
               !isAuthenticated ? (
-                <>
+                <div>
                   <UserLogin onLoginSuccess={handleLoginSuccess} />
-                  <UserRegistration onRegisterSuccess={handleLoginSuccess} />
-                </>
+                  <p>
+                    Don't have an account? <Link to="/register">Register</Link>
+                  </p>
+                </div>
               ) : (
-                <Navigate to="/app" /> // Redirect to app page if authenticated
+                <Navigate to="/app" />
+              )
+            } 
+          />
+          <Route 
+            path="/register" 
+            element={
+              !isAuthenticated ? (
+                <div>
+                  <UserRegistration onRegisterSuccess={handleLoginSuccess} />
+                  <p>
+                    Already have an account? <Link to="/">Login</Link>
+                  </p>
+                </div>
+              ) : (
+                <Navigate to="/app" />
               )
             } 
           />
           <Route 
             path="/app/*" 
-            element={isAuthenticated ? <UserSystemApp onLogout={handleLogout} /> : <Navigate to="/" />} // Redirect to login if not authenticated
+            element={isAuthenticated ? <UserSystemApp onLogout={handleLogout} /> : <Navigate to="/" />} 
           />
         </Routes>
       </div>
