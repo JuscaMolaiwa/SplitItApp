@@ -9,7 +9,10 @@ import sys
 import os
 from app.config import TestingConfig
 from app import create_app, db
-from app.routes.auth import get_current_user_id, login_required
+from app.utils.auth_utils import login_required, get_current_user_id
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+
 
 class AuthBlueprintTests(unittest.TestCase):
     def setUp(self):
@@ -32,7 +35,7 @@ class AuthBlueprintTests(unittest.TestCase):
     def test_get_current_user_id_valid_token(self):
         """Test getting user ID from a valid token."""
         with self.app.test_request_context(headers={'Authorization': 'Bearer test_token'}):
-            with patch('app.routes.auth.jwt.decode') as mock_jwt_decode:
+            with patch('app.utils.auth_utils.jwt.decode') as mock_jwt_decode:
                 # Simulate a valid decoded token
                 mock_jwt_decode.return_value = {'sub': 123}
                 
@@ -132,14 +135,14 @@ class AuthBlueprintTests(unittest.TestCase):
     def test_admin_required_decorator(self):
         """Test admin_required decorator."""
         # Scenario 1: Admin access
-        with patch('app.routes.auth.jwt.decode') as mock_jwt_decode:
+        with patch('app.utils.auth_utils.jwt.decode') as mock_jwt_decode:
             mock_jwt_decode.return_value = {'role': 'admin'}
             
             # Create a test route with admin_required decorator
             with self.app.test_client() as client:
                 @self.app.route('/admin-test')
                 def test_admin_view():
-                    from app.routes.auth import admin_required
+                    from app.utils.auth_utils import admin_required
                     @admin_required
                     def protected_view():
                         return "Admin Access Granted"
@@ -151,7 +154,7 @@ class AuthBlueprintTests(unittest.TestCase):
                 self.assertEqual(response.status_code, 200)
 
         # Scenario 2: Non-admin access
-        with patch('app.routes.auth.jwt.decode') as mock_jwt_decode:
+        with patch('app.utils.auth_utils.jwt.decode') as mock_jwt_decode:
             mock_jwt_decode.return_value = {'role': 'user'}
             
             with self.app.test_client() as client:
@@ -162,7 +165,7 @@ class AuthBlueprintTests(unittest.TestCase):
     def test_login_required_decorator(self):
         """Test login_required decorator."""
         # Mock the get_current_user_id function
-        with patch('app.routes.auth.get_current_user_id') as mock_get_user_id:
+        with patch('app.utils.auth_utils.get_current_user_id') as mock_get_user_id:
             # Scenario 1: Authenticated access
             mock_get_user_id.return_value = 1
 
@@ -178,7 +181,7 @@ class AuthBlueprintTests(unittest.TestCase):
             mock_get_user_id.return_value = None
 
             # Patch jsonify in the module where it is used
-            with patch('app.routes.auth.jsonify') as mock_jsonify:
+            with patch('app.utils.auth_utils.jsonify') as mock_jsonify:
                 mock_jsonify.return_value = MagicMock(status_code=401)
 
                 @login_required
