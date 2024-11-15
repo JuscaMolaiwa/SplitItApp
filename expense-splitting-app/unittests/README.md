@@ -65,20 +65,20 @@ python -W ignore -m unittest discover -s unittests -p "test_*.py" -v
 ## Running Integration Tests
 ### Tests Included
   - Authentication Tests
-  - get_current_user_id:
-  - Validates decoding of valid tokens.
-  - Handles cases where no token is provided.
+    - get_current_user_id:
+    - Validates decoding of valid tokens.
+    - Handles cases where no token is provided.
   - Registration
-  - Tests successful user registration.
-  - Validates error handling for missing or invalid fields.
+    - Tests successful user registration.
+    - Validates error handling for missing or invalid fields.
   - Login
-  - Verifies successful login and token generation.
-  - Ensures graceful handling of invalid credentials.
+    - Verifies successful login and token generation.
+    - Ensures graceful handling of invalid credentials.
 - Decorators
-- admin_required:
-  - Tests behavior for admin and non-admin users.
-- login_required:
-  - Validates access control for authenticated and unauthenticated users.
+    - admin_required:
+        - Tests behavior for admin and non-admin users.
+    - login_required:
+        - Validates access control for authenticated and unauthenticated users.
 
 ## Mocking
 The test suite employs mocking to isolate unit test behavior. Commonly mocked elements include:
