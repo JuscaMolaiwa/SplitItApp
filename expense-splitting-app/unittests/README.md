@@ -62,8 +62,7 @@ python -m unittest discover -s unittests -p "test_*.py"
 ```
 python -W ignore -m unittest discover -s unittests -p "test_*.py" -v
 ```
-## Running Integration Tests
-### Tests Included
+## Tests Included
   - Authentication Tests
     - get_current_user_id:
     - Validates decoding of valid tokens.
