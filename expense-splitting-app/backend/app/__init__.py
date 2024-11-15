@@ -9,10 +9,10 @@ from flask_jwt_extended import JWTManager # type: ignore
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
+def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
-    app.config.from_object(DevelopmentConfig)  # Use the desired config class
 
+    app.config.from_object(config_class)
     
     # Initialize JWTManager
     jwt = JWTManager(app)
@@ -37,6 +37,7 @@ def create_app():
     app.register_blueprint(expenses.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(admin.bp)
+
 
     @app.errorhandler(Exception)
     def handle_exception(e):
