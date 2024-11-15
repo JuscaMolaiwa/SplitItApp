@@ -19,7 +19,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     """Testing configuration."""
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URI', 'DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URI', 'TEST_DATABASE_URI')
 
 class ProductionConfig(Config):
     """Production configuration."""

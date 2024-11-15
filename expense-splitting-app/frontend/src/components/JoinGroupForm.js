@@ -4,7 +4,7 @@ import { FaUsers } from 'react-icons/fa';
 import { FaCog } from 'react-icons/fa'
 
 
-const JoinGroupForm = () => {
+const JoinGroupForm = ({groups}) => {
     const [uniqueCode, setUniqueCode] = useState('');
     const [message, setMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -12,6 +12,7 @@ const JoinGroupForm = () => {
     const [loading, setLoading] = useState(false);
     const [joinedGroups, setJoinedGroups] = useState([]); // State for joined groups
 
+    // Reusable function to fetch joined groups
     const fetchJoinedGroups = async () => {
         const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
         if (!token) {
@@ -131,8 +132,8 @@ const JoinGroupForm = () => {
                                     {group.description || 'No description provided'}
                                 </td>
                                 <td className="px-4 py-3 border-gray-300">
-                                    <Link
-                                        to={`groups/members?group_id=${group.group_id}`}
+                                    <Link 
+                                        to={`/groups/members?group_id=${group.group_id}`}
                                         className="text-indigo-600 hover:text-indigo-800 font-medium"
                                     >
                                         View Members
