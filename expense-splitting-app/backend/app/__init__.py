@@ -13,17 +13,30 @@ migrate = Migrate()
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
 
-    app.config.from_object(config_class)
+    # Check if config_class is a dictionary
+    if isinstance(config_class, dict):
+        app.config.update(config_class)
+    else:
+        # If it's a config class, use from_object
+        app.config.from_object(config_class)
     
+    # Ensure CORS_ORIGINS has a default and is a list
+    cors_origins = app.config.get('CORS_ORIGINS', '*')
+    
+    # Convert string to list if it's a single string
+    if isinstance(cors_origins, str):
+        cors_origins = [cors_origins]
+    
+    # Enable CORS for the application
+    CORS(app, resources={r"/api/*": {"origins": cors_origins}}, supports_credentials=True)
+
+
     # Initialize JWTManager
     jwt = JWTManager(app)
     
      # Register token blocklist loader
     from .routes.logout import blacklist_loader  # Import the blacklist loader function
     jwt.token_in_blocklist_loader(blacklist_loader)
-
-    # Enable CORS for the application
-    CORS(app, resources={r"/api/*": {"origins": app.config['CORS_ORIGINS']}}, supports_credentials=True)
 
     # Initialize the database and migration with the app
     db.init_app(app)
