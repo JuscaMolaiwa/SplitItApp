@@ -5,6 +5,7 @@ from flask import Flask, json # type: ignore
 import jwt # type: ignore
 import time
 import io
+from app import db
 from app.routes.profile import bp  # Import the profile blueprint
 from app.services.profile_service import ProfileService
 
@@ -21,6 +22,7 @@ class TestProfileRoutes(unittest.TestCase):
         
         # Create test client
         self.client = self.app.test_client()
+        self.profile_service = ProfileService()
 
     def _generate_test_token(self, user_id):
         """Helper method to generate a test JWT token."""
@@ -191,6 +193,12 @@ class TestProfileRoutes(unittest.TestCase):
                 self.app.config['UPLOAD_FOLDER'], 
                 'test_image.jpg'
             )
+
+    def tearDown(self):
+        """Tear down the test database."""
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
 
 if __name__ == '__main__':
     unittest.main()
