@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, request, jsonify, current_app, send_from_directory # type: ignore
 from ..models import User
 from .. import db
-from .auth import get_current_user_id, login_required
+from ..utils.auth_utils import get_current_user_id, login_required
 from flask_jwt_extended import jwt_required # type: ignore
 from ..services.profile_service import ProfileService  # Import the ProfileService
 

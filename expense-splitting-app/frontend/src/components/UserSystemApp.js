@@ -5,6 +5,7 @@ import ProfileManagement from './ProfileManagement';
 import CreateExpense from './CreateExpenses';
 import GroupMembers from './GroupMembers'; 
 import ExpenseManager from './ExpenseManager';
+import JoinGroupForm from './JoinGroupForm';
 
 const UserSystemApp = ({ onLogout }) => {
   const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
@@ -43,39 +44,22 @@ const UserSystemApp = ({ onLogout }) => {
           </button>
         </div>
       </nav>
-
-      {/* Main Content */}
-      <main className="flex-grow p-4">
-        <Routes>
-          <Route 
-            path="/profile" 
-            element={<ProfileManagement />} 
-          />
-          <Route 
-            path="/groups" 
-            element={<GroupCreation onGroupCreate={handleGroupCreation} />} 
-          />
-          <Route 
-            path="/expenses" 
-            element={
-              showExpenseManager ? (
-                <ExpenseManager groupId={activeGroupId} />
-              ) : (
-                <CreateExpense onExpenseCreate={handleExpenseCreated} />
-              )
-            } 
-          />
-          <Route 
-            path="/group-members" 
-            element={<GroupMembers groupId={activeGroupId} />} 
-          />
-        </Routes>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white text-center py-3">
-        <p>&copy; 2024 User System. All rights reserved.</p>
-      </footer>
+      <Routes>
+        <Route path="group" element={<GroupCreation onGroupCreation={handleGroupCreation} />} />
+        <Route path="profile" element={<ProfileManagement />} />
+        <Route 
+          path="create-expense" 
+          element={
+            <>
+              <CreateExpense groupId={activeGroupId} onExpenseCreated={handleExpenseCreated} />
+              {showExpenseManager && (
+                <ExpenseManager groupId={activeGroupId} onClose={handleExpenseManagerClose} />
+              )}
+            </>
+          } 
+        />
+        <Route path="/groups/:groupId/members" element={<GroupMembers />} />
+      </Routes>
     </div>
   );
 };

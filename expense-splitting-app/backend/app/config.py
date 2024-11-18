@@ -15,12 +15,18 @@ class Config:
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True
+    CORS_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']
 
 class TestingConfig(Config):
     """Testing configuration."""
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URI', 'DATABASE_URI')
+    CORS_ORIGINS = '*' 
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URI')
 
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
+    SQLALCHEMY_DATABASE_URI = 'production-database-uri'
+    CORS_ORIGINS = ['https://yourdomain.com']  # Specific production origins
+    

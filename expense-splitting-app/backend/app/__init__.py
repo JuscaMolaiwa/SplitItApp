@@ -5,24 +5,38 @@ from flask_migrate import Migrate # type: ignore
 from flask_cors import CORS # type: ignore
 from .config import DevelopmentConfig  # Change this to the appropriate config class
 from flask_jwt_extended import JWTManager # type: ignore
+from .utils import auth_utils
 
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
+def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
-    app.config.from_object(DevelopmentConfig)  # Use the desired config class
 
+    # Check if config_class is a dictionary
+    if isinstance(config_class, dict):
+        app.config.update(config_class)
+    else:
+        # If it's a config class, use from_object
+        app.config.from_object(config_class)
     
+    # Ensure CORS_ORIGINS has a default and is a list
+    cors_origins = app.config.get('CORS_ORIGINS', '*')
+    
+    # Convert string to list if it's a single string
+    if isinstance(cors_origins, str):
+        cors_origins = [cors_origins]
+    
+    # Enable CORS for the application
+    CORS(app, resources={r"/api/*": {"origins": cors_origins}}, supports_credentials=True)
+
+
     # Initialize JWTManager
     jwt = JWTManager(app)
     
      # Register token blocklist loader
     from .routes.logout import blacklist_loader  # Import the blacklist loader function
     jwt.token_in_blocklist_loader(blacklist_loader)
-
-    # Enable CORS for the application
-    CORS(app, resources={r"/api/*": {"origins": app.config['CORS_ORIGINS']}}, supports_credentials=True)
 
     # Initialize the database and migration with the app
     db.init_app(app)
@@ -37,6 +51,7 @@ def create_app():
     app.register_blueprint(expenses.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(admin.bp)
+
 
     @app.errorhandler(Exception)
     def handle_exception(e):

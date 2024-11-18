@@ -1,7 +1,7 @@
 import logging
 from flask import Blueprint, request, jsonify # type: ignore
 from ..services.expense_service import ExpenseService  # Import the ExpenseService
-from .auth import get_current_user_id, login_required
+from ..utils.auth_utils import get_current_user_id, login_required
 from flask_jwt_extended import jwt_required # type: ignore
 
 bp = Blueprint('expenses', __name__)

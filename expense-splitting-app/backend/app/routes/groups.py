@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify # type: ignore
 from ..services.group_service import GroupService  # Import the GroupService
 from flask_jwt_extended import jwt_required # type: ignore
-from .auth import get_current_user_id, login_required
+from ..utils.auth_utils import get_current_user_id, login_required
 
 bp = Blueprint('groups', __name__)
 

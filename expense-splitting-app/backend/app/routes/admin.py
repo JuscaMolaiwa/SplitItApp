@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, current_app  # type: ignore
 from ..services.admin_service import AdminService  # Import the UserService
 import jwt  # type: ignore
 from flask_jwt_extended import jwt_required  # type: ignore
-from .auth import get_current_user_id, login_required, admin_required
+from ..utils.auth_utils import admin_required
 from ..models import User
 from .. import db
 
