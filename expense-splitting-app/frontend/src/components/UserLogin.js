@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './UserLogin.css';
 
 const UserLogin = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
@@ -60,12 +61,12 @@ const UserLogin = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">User Login</h2>
+    <div className="container space-y-4">
+      <h2 className="header text-2xl font-bold">User Login</h2>
 
-      {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
+      {errorMessage && <div className="error-message text-red-500 text-sm">{errorMessage}</div>}
 
-      <div>
+      <div className="form-field">
         <label htmlFor="username" className="block font-medium">
           Username
         </label>
@@ -78,7 +79,7 @@ const UserLogin = ({ onLoginSuccess }) => {
         />
       </div>
 
-      <div>
+      <div className="form-field">
         <label htmlFor="password" className="block font-medium">
           Password
         </label>
@@ -91,7 +92,7 @@ const UserLogin = ({ onLoginSuccess }) => {
         />
       </div>
 
-      <div>
+      <div className="remember-me">
         <label htmlFor="remember-me" className="inline-flex items-center">
           <input
             type="checkbox"
@@ -108,7 +109,7 @@ const UserLogin = ({ onLoginSuccess }) => {
       <button
         onClick={handleLogin}
         disabled={loading}
-        className={`bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`login-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
         {loading ? 'Logging in...' : 'Login'}
       </button>

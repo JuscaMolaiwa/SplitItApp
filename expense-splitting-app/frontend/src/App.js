@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import UserLogin from './components/UserLogin';
 import UserRegistration from './components/UserRegistration';
@@ -28,45 +28,48 @@ function App() {
 
   return (
     <Router>
-      <div className="app-container">
-        <h1 className="app-title">Welcome to the App</h1>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              !isAuthenticated ? (
-                <div className="form-container">
-                  <UserLogin onLoginSuccess={handleLoginSuccess} />
-                  <p className="redirect-text">
-                    Don't have an account? <Link to="/register" className="link">Register</Link>
-                  </p>
-                </div>
-              ) : (
-                <Navigate to="/app" />
-              )
-            } 
-          />
-          <Route 
-            path="/register" 
-            element={
-              !isAuthenticated ? (
-                <div className="form-container">
-                  <UserRegistration onRegisterSuccess={handleLoginSuccess} />
-                  <p className="redirect-text">
-                    Already have an account? <Link to="/" className="link">Login</Link>
-                  </p>
-                </div>
-              ) : (
-                <Navigate to="/app" />
-              )
-            } 
-          />
-          <Route 
-            path="/app/*" 
-            element={isAuthenticated ? <UserSystemApp onLogout={handleLogout} /> : <Navigate to="/" />} 
-          />
-        </Routes>
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="app-container">
+          <h1 className="app-title">SplitItApp</h1>
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                !isAuthenticated ? (
+                  <div className="form-container">
+                    <UserLogin onLoginSuccess={handleLoginSuccess} />
+                    <p className="redirect-text">
+                      Don't have an account? <Link to="/register" className="link">Register</Link>
+                    </p>
+                  </div>
+                ) : (
+                  <Navigate to="/app" />
+                )
+              } 
+            />
+            <Route 
+              path="/register" 
+              element={
+                !isAuthenticated ? (
+                  <div className="form-container">
+                    <UserRegistration onRegisterSuccess={handleLoginSuccess} />
+                    <p className="redirect-text">
+                      Already have an account? <Link to="/" className="link">Login</Link>
+                    </p>
+                  </div>
+                ) : (
+                  <Navigate to="/app" />
+                )
+              } 
+            />
+            <Route 
+              path="/app/*" 
+              element={isAuthenticated ? <UserSystemApp onLogout={handleLogout} /> : <Navigate to="/" />} 
+            />
+          </Routes>
+
+          </div>
+      </Suspense>
     </Router>
   );
 }

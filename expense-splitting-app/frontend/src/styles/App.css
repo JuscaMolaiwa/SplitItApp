@@ -1,86 +1,85 @@
 /* Center the main container */
 .app-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Title styling */
-  .app-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  /* Centered form container */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: Arial, sans-serif;
+}
+
+/* Title styling */
+.app-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: blue;
+  margin-bottom: 20px;
+}
+
+/* Centered form container */
+.form-container {
+  background-color: #fff;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Text styling for links and redirect text */
+.redirect-text {
+  margin-top: 20px;
+  color: #666;
+}
+
+.link {
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Form input styling */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="submit"] {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+form input[type="submit"] {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form input[type="submit"]:hover {
+  background-color: #357abd;
+}
+
+/* Optional responsive design */
+@media (max-width: 500px) {
   .form-container {
-    background-color: #fff;
-    padding: 30px;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    padding: 20px;
+    width: 90%;
   }
-  
-  /* Text styling for links and redirect text */
-  .redirect-text {
-    margin-top: 20px;
-    color: #666;
+
+  .app-title {
+    font-size: 1.5rem;
   }
-  
-  .link {
-    color: #4a90e2;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .link:hover {
-    text-decoration: underline;
-  }
-  
-  /* Form input styling */
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  form input[type="text"],
-  form input[type="password"],
-  form input[type="email"],
-  form input[type="submit"] {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-  }
-  
-  form input[type="submit"] {
-    background-color: #4a90e2;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  form input[type="submit"]:hover {
-    background-color: #357ABD;
-  }
-  
-  /* Optional responsive design */
-  @media (max-width: 500px) {
-    .form-container {
-      padding: 20px;
-      width: 90%;
-    }
-  
-    .app-title {
-      font-size: 1.5rem;
-    }
-  }
-  
+}
