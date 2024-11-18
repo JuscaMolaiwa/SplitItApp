@@ -5,7 +5,6 @@ import ProfileManagement from './ProfileManagement';
 import CreateExpense from './CreateExpenses';
 import GroupMembers from './GroupMembers'; 
 import ExpenseManager from './ExpenseManager';
-import JoinGroupForm from './JoinGroupForm';
 
 const UserSystemApp = ({ onLogout }) => {
   const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
@@ -26,6 +25,10 @@ const UserSystemApp = ({ onLogout }) => {
 
   const handleExpenseCreated = () => {
     console.log('Expense has been created!');
+  };
+
+  const handleExpenseManagerClose = () => {
+    setShowExpenseManager(false);
   };
 
   return (

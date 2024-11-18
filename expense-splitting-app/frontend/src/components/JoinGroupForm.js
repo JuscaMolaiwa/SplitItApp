@@ -93,7 +93,7 @@ const JoinGroupForm = ({groups}) => {
 
     useEffect(() => {
         fetchJoinedGroups(); // Fetch joined groups when the component mounts
-    }, []);
+    });
 
 
     return (
