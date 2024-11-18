@@ -1,0 +1,24 @@
+.dashboard-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .recent-posts {
+    margin-top: 20px;
+  }
+  
+  .post-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .post-item a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  .post-item a:hover {
+    text-decoration: underline;
+  }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import UserLogin from './components/UserLogin';
@@ -5,29 +6,22 @@ import UserRegistration from './components/UserRegistration';
 import UserSystemApp from './components/UserSystemApp';
 import './styles/App.css';
 import './App.css';
+=======
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import CreateGroup from './pages/CreateGroup';
+import GroupDetail from './pages/GroupDetail';
+>>>>>>> 21f1e9a619a797ede48bdfa7933f99d70f7491f4
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Check for token in both localStorage and sessionStorage
-    const token = localStorage.getItem("auth_token") || sessionStorage.getItem("auth_token");
-    setIsAuthenticated(!!token); // Set isAuthenticated based on token presence
-  }, []);
-  
-
-  const handleLoginSuccess = () => {
-    setIsAuthenticated(true);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('auth_token');
-    sessionStorage.removeItem('auth_token');
-    setIsAuthenticated(false);
-  };
-
   return (
     <Router>
+<<<<<<< HEAD
       <Suspense fallback={<div>Loading...</div>}>
         <div className="app-container">
           <h1 className="app-title">SplitItApp</h1>
@@ -70,6 +64,22 @@ function App() {
 
           </div>
       </Suspense>
+=======
+      <div>
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/create-group" element={<CreateGroup />} />
+            <Route path="/group/:id" element={<GroupDetail />} />
+            <Route path="/" element={<Dashboard />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+>>>>>>> 21f1e9a619a797ede48bdfa7933f99d70f7491f4
     </Router>
   );
 }
