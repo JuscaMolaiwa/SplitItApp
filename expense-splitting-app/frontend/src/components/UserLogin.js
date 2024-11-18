@@ -6,19 +6,19 @@ const UserLogin = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // useNavigate hook to handle navigation
   const [rememberMe, setRememberMe] = useState(false); // State for remember me checkbox
+  const navigate = useNavigate(); // useNavigate hook to handle navigation
 
   const handleLogin = async () => {
     if (!username || !password) {
       setErrorMessage('Both username and password are required.');
       return;
     }
-  
+
     const userData = {
       username,
       password,
-      remember_me: rememberMe, 
+      remember_me: rememberMe,
     };
 
     setLoading(true);
@@ -38,17 +38,17 @@ const UserLogin = ({ onLoginSuccess }) => {
       if (response.ok) {
         // Store token based on rememberMe
         if (rememberMe) {
-          localStorage.setItem('auth_token', data.token); // Save token in localStorage for persistent session for certain days
+          localStorage.setItem('auth_token', data.token); // Save token in localStorage for persistent session
         } else {
-          sessionStorage.setItem('auth_token', data.token); // Save token in sessionStorage for session-only for hours
+          sessionStorage.setItem('auth_token', data.token); // Save token in sessionStorage for session-only session
         }
 
         onLoginSuccess();
 
         alert('Login successful');
         
-        // Handle redirect or login success logic
-        navigate('/app');  // Redirecting to the Profile page
+        // Redirect after successful login
+        navigate('/app'); // Redirecting to the Profile page
       } else {
         setErrorMessage(data.error || 'Login failed');
       }
@@ -103,7 +103,6 @@ const UserLogin = ({ onLoginSuccess }) => {
           Remember Me
         </label>
       </div>
-
 
       <button
         onClick={handleLogin}

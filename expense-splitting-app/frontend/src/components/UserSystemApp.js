@@ -27,56 +27,55 @@ const UserSystemApp = ({ onLogout }) => {
     console.log('Expense has been created!');
   };
 
-  const handleCreateExpenseClick = () => {
-    setShowExpenseManager(true); // Show ExpenseManager when Create Expense is clicked
-  };
-
-  const handleExpenseManagerClose = () => {
-    setShowExpenseManager(false); // Hide ExpenseManager
-  };
-
   return (
-    <div className="max-w-md mx-auto py-8">
-      <nav className="mb-8">
-        <ul className="flex space-x-4">
-          <li>
-            <Link to="/app/group" className="text-indigo-600 hover:text-indigo-800 font-medium">
-              Group Management
-            </Link>
-          </li>
-          <li>
-            <Link to="/app/profile" className="text-indigo-600 hover:text-indigo-800 font-medium">
-              Profile Management
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="/app/create-expense" 
-              className="text-indigo-600 hover:text-indigo-800 font-medium"
-              onClick={handleCreateExpenseClick} // Show ExpenseManager when clicked
-            >
-              Expenses
-            </Link>
-          </li>
-        </ul>
-        <button onClick={handleLogout} className="mt-4 text-red-600">Logout</button>
+    <div className="h-screen flex flex-col">
+      {/* Navbar */}
+      <nav className="bg-indigo-600 text-white px-4 py-3 flex justify-between items-center">
+        <h1 className="text-xl font-bold">User System</h1>
+        <div className="flex space-x-4">
+          <Link to="/profile" className="hover:underline">Profile</Link>
+          <Link to="/groups" className="hover:underline">Groups</Link>
+          <Link to="/expenses" className="hover:underline">Expenses</Link>
+          <button 
+            onClick={handleLogout} 
+            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-sm">
+            Logout
+          </button>
+        </div>
       </nav>
-      <Routes>
-        <Route path="group" element={<GroupCreation onGroupCreation={handleGroupCreation} />} />
-        <Route path="profile" element={<ProfileManagement />} />
-        <Route 
-          path="create-expense" 
-          element={
-            <>
-              <CreateExpense groupId={activeGroupId} onExpenseCreated={handleExpenseCreated} />
-              {showExpenseManager && (
-                <ExpenseManager groupId={activeGroupId} onClose={handleExpenseManagerClose} />
-              )}
-            </>
-          } 
-        />
-        <Route path="/groups/:groupId/members" element={<GroupMembers />} />
-      </Routes>
+
+      {/* Main Content */}
+      <main className="flex-grow p-4">
+        <Routes>
+          <Route 
+            path="/profile" 
+            element={<ProfileManagement />} 
+          />
+          <Route 
+            path="/groups" 
+            element={<GroupCreation onGroupCreate={handleGroupCreation} />} 
+          />
+          <Route 
+            path="/expenses" 
+            element={
+              showExpenseManager ? (
+                <ExpenseManager groupId={activeGroupId} />
+              ) : (
+                <CreateExpense onExpenseCreate={handleExpenseCreated} />
+              )
+            } 
+          />
+          <Route 
+            path="/group-members" 
+            element={<GroupMembers groupId={activeGroupId} />} 
+          />
+        </Routes>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white text-center py-3">
+        <p>&copy; 2024 User System. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
