@@ -8,6 +8,8 @@
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
+- [Roadmap](#roadmap)
+- [Acknowledgments](#acknowledgments)
 
 ## Introduction
 The Expense Splitting App is a web application that allows groups of people, such as roommates or friends, to easily track and split expenses. It provides features for managing expenses, calculating balances, and facilitating payments between group members.
@@ -34,7 +36,7 @@ The Expense Splitting App is a web application that allows groups of people, suc
 
 - Clone the repository:
 
-   ```
+   ```   ```bash
    git clone https://github.com/your-username/SplitItApp.git
    ```
 
@@ -58,6 +60,14 @@ We welcome contributions to the Expense Splitting App project. If you would like
 3. Make your changes and commit them.
 4. Push your branch to your forked repository.
 5. Submit a pull request to the original repository.
+
+## Roadmap
+- Implement machine learning-based expense categorization
+- Integrate with popular calendar apps for event-based expense tracking
+- Develop a mobile app for on-the-go expense tracking
+
+## Acknowledgments
+We would like to thank the open-source community for their contributions to the project.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
