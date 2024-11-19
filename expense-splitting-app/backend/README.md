@@ -75,13 +75,13 @@ python3 -c "import secrets; print(secrets.token_hex(32))"
 TEST_DATABASE_URI=sqlite:///:memory:
 ```
 
-    - Run unit tests with:
+- Run unit tests with:
     
-  ```bash
+```bash
   python -W ignore -m unittest discover -s unittests -p "test_*.py”
-  ```
+```
 
-    - Please refer to the [Unittest README](../backend/unittests/README.md) for setup and more info.
+  - Please refer to the [Unittest README](../backend/unittests/README.md) for setup and more info.
 
 6. ### Run the Application
 
