@@ -5,6 +5,22 @@ class ExpenseService:
 
     @staticmethod
     def add_expense(user_id, amount, description, group_id):
+
+        """
+        Create an expense with split
+        
+        :param user_id: The ID of the user creating the expense.
+        :param total_amount: The total amount of the expense.
+        :param description: A description of the expense.
+        :param split_type: The type of split (e.g., EQUAL, PERCENTAGE, etc.).
+        :param group_id: The group ID for the expense.
+        :param participants: A list of names participating in the split.
+        :param paid_by: The user who paid the total amount of the expense.
+        :return: The created expense and its splits.
+        """
+
+
+
         # Validate required fields
         if amount is None or group_id is None:
             raise ValueError('Amount and group are required.')
