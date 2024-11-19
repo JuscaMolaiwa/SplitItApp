@@ -38,6 +38,8 @@ class ExpenseService:
         is_member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
         if not is_member:
             raise PermissionError('User is not part of the selected group.')
+        
+        
 
         # Create a new expense
         expense = Expense(
@@ -49,6 +51,8 @@ class ExpenseService:
         
         db.session.add(expense)
         db.session.commit()
+
+        # Implement a fucntion to Create expense splits
 
         return expense
 
