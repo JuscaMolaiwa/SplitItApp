@@ -14,7 +14,9 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 
 1. ### Navigate to the Frontend Directory
 - Open a terminal and navigate to the Backend directory:
-    - `cd backend
+    ```
+    cd expense-splitting-app/backend
+    ```
 
 2. ### Set Up the Virtual Environment
 - Create a virtual environment:
@@ -26,9 +28,9 @@ This guide explains the steps to set up the backend of the Expense Splitting App
     source venv/bin/activate
     ```
 - Install project dependencies:
-```
-pip install -r requirements.txt
-```
+    ```
+    pip install -r requirements.txt
+    ```
 
 3. ### Set Up the Database
 - Install and configure MySQL on your system.
@@ -49,7 +51,13 @@ pip install -r requirements.txt
     UPLOAD_FOLDER=uploads
     ALLOWED_EXTENSIONS=png,jpg,jpeg,gif
     ```
-Replace `<username>`, `<password>`, and `your-secret-key` with your actual database credentials
+
+- To generate the SECRET_KEY and replace the `your-secret-key`, you can use the following command:
+    ```
+    python3 -c "import secrets; print(secrets.token_hex(32))"
+    ```
+- Replace `<username>`, `<password>` with your actual database credentials.
+- Use the JWT_SECRET_KEY from .env as is for authentication during unit testing and development.
 
 5. ### Testing
 - Run the tests:
