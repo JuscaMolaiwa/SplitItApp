@@ -1,9 +1,11 @@
 # Expense Splitting App - Backend Setup
 
 ## Overview
+
 This guide explains the steps to set up the backend of the Expense Splitting App on your local environment. Follow these instructions to install dependencies, configure the database, and run the application.
 
 ## Prerequisites
+
 - Python 3.8+
 - MySQL installed and configured
 - Node.js and npm (for frontend setup)
@@ -33,6 +35,7 @@ This guide explains the steps to set up the backend of the Expense Splitting App
     ```
 
 3. ### Set Up the Database
+
 - Install and configure MySQL on your system.
 - Create a new database for the project:
     ```
@@ -40,6 +43,7 @@ This guide explains the steps to set up the backend of the Expense Splitting App
     ```
 
 4. ### Update/Create the .env file at root of `expense-splitting-app` folder with your database credentials:
+
     ```
     DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_splitting
     TEST_DATABASE_URI=sqlite:///:memory:
@@ -58,19 +62,25 @@ This guide explains the steps to set up the backend of the Expense Splitting App
     python3 -c "import secrets; print(secrets.token_hex(32))"
     ```
 - Replace `<username>`, `<password>` with your actual database credentials.
+
 - Use the JWT_SECRET_KEY from .env as is for authentication during unit testing and development.
 
-5. ### Testing
+5. ### Unit Testing
+
 - Run the tests:
     - Ensure TEST_DATABASE_URI in .env is set to:
+
         ```
         TEST_DATABASE_URI=sqlite:///:memory:
         ```
 
     - Run unit tests with:
+    
         ```
         python -W ignore -m unittest discover -s unittests -p "test_*.py”
         ```
+
+    - Please refer to the [Unittest README](../backend/unittests/README.md) for setup and more info.
 
 6. ### Run the Application
 
@@ -188,7 +198,6 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 - **Response**:
   - `200 OK`: List of expenses.
   - `500 Internal Server Error`: Unexpected error.
-
 
 ## Contributing
 - We welcome contributions! Please refer to the [Main Project README](../../README.md) for contribution guidelines.
