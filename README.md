@@ -4,7 +4,7 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Technical Stack](#technical-stack)
-- [Installation](#installation)
+- [Installation and Setup](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
