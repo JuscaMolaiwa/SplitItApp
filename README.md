@@ -36,9 +36,9 @@ The Expense Splitting App is a web application that allows groups of people, suc
 
 - Clone the repository:
 
-   ```   ```bash
+```bash
    git clone https://github.com/your-username/SplitItApp.git
-   ```
+```
 
 - Follow the instructions in the respective directories to set up the frontend and backend:
 

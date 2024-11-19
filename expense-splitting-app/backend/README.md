@@ -17,21 +17,21 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 1. ### Navigate to the Backend Directory
 
 - Open a terminal and navigate to the Backend directory:
-    ```bash
+```bash
 cd expense-splitting-app/backend
 ```
 
 2. ### Set Up the Virtual Environment
 - Create a virtual environment:
-    ```bash
+```bash
 python3 -m venv venv
 ```
 - Activate the virtual environment:
-    ```bash
+```bash
 source venv/bin/activate
 ```
 - Install project dependencies:
-    ```bash
+```bash
 pip install -r requirements.txt
 ```
 
@@ -39,13 +39,13 @@ pip install -r requirements.txt
 
 - Install and configure MySQL on your system.
 - Create a new database for the project:
-    ```sql
+```sql
 CREATE DATABASE expense_splitting;
 ```
 
 4. ### Update/Create the .env file at root of `expense-splitting-app` folder with your database credentials:
 
-    ```makefile
+```makefile
 DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_splitting
 TEST_DATABASE_URI=sqlite:///:memory:
 SECRET_KEY=your-secret-key
@@ -59,7 +59,7 @@ ALLOWED_EXTENSIONS=png,jpg,jpeg,gif
 
 - To generate the SECRET_KEY and replace the `your-secret-key`, you can use the following command:
 
-    ```bash
+```bash
 python3 -c "import secrets; print(secrets.token_hex(32))"
 ```
 - Replace `<username>`, `<password>` with your actual database credentials.
@@ -71,15 +71,15 @@ python3 -c "import secrets; print(secrets.token_hex(32))"
 - Run the tests:
     - Ensure TEST_DATABASE_URI in .env is set to:
 
-        ```makefile
+```makefile
 TEST_DATABASE_URI=sqlite:///:memory:
 ```
 
     - Run unit tests with:
     
-        ```bash
-python -W ignore -m unittest discover -s unittests -p "test_*.py”
-```
+  ```bash
+  python -W ignore -m unittest discover -s unittests -p "test_*.py”
+  ```
 
     - Please refer to the [Unittest README](../backend/unittests/README.md) for setup and more info.
 
@@ -87,13 +87,13 @@ python -W ignore -m unittest discover -s unittests -p "test_*.py”
 
 - Start the backend application:
 
-    ```bash
+```bash
 python app.py
 ```
 
 - The backend server should now be running. You can access it at:
 
-    ```bash
+```bash
 http://127.0.0.1:5000/
 ```
 
