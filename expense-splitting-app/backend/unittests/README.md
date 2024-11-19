@@ -20,31 +20,30 @@ The test suite is built using Python's unittest framework and targets the authen
 
 ## Setup
 - Clone the Repository
-    ``` bash
+```
 git clone https://github.com/your-username/SplitItApp.git
 
 cd expense-splitting-app
 ```
 - Create a Virtual Environment
 - It’s recommended to use a virtual environment to manage dependencies.
-  ```bash
+```
 python -m venv venv
 ```
 - Activate the Virtual Environment
   - On macOS/Linux:
-    ```bash
+```
 source venv/bin/activate
 ```
    - On Windows:
-
-    ```bash
+```
 venv\Scripts\activate
 ```
 
 ## Install Dependencies
 Install the required packages, including Flask and testing libraries, using:
 
-    ```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -54,13 +53,13 @@ Ensure any required environment variables (e.g., FLASK_ENV, DATABASE_URL) are se
 ### Running Unit Tests
 Run the unit tests with:
 
-    ```bash
+```
 python -m unittest discover -s unittests -p "test_*.py"
 ```
 
 ## For more detailed output, use the verbose flag:
 
-    ```bash
+```
 python -W ignore -m unittest discover -s unittests -p "test_*.py" -v
 ```
 ## Tests Included
@@ -97,3 +96,4 @@ Add tests or improve existing ones.
 Submit a pull request with a clear description of your changes.
 
 ### Happy Testing! 🎉
+
