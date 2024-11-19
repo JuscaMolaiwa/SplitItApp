@@ -14,53 +14,54 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 
 ## Setup Instructions
 
-1. ### Navigate to the Frontend Directory
+1. ### Navigate to the Backend Directory
+
 - Open a terminal and navigate to the Backend directory:
-    ```
-    cd expense-splitting-app/backend
-    ```
+    ```bash
+cd expense-splitting-app/backend
+```
 
 2. ### Set Up the Virtual Environment
 - Create a virtual environment:
-    ```
-    python3 -m venv venv
-    ```
+    ```bash
+python3 -m venv venv
+```
 - Activate the virtual environment:
-    ```
-    source venv/bin/activate
-    ```
+    ```bash
+source venv/bin/activate
+```
 - Install project dependencies:
-    ```
-    pip install -r requirements.txt
-    ```
+    ```bash
+pip install -r requirements.txt
+```
 
 3. ### Set Up the Database
 
 - Install and configure MySQL on your system.
 - Create a new database for the project:
-    ```
-    CREATE DATABASE expense_splitting;
-    ```
+    ```sql
+CREATE DATABASE expense_splitting;
+```
 
 4. ### Update/Create the .env file at root of `expense-splitting-app` folder with your database credentials:
 
-    ```
-    DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_splitting
-    TEST_DATABASE_URI=sqlite:///:memory:
-    SECRET_KEY=your-secret-key
-    FLASK_DEBUG=1
-    FLASK_APP=app.py
-    FLASK_ENV=development
-    JWT_SECRET_KEY=test-secret-key
-    UPLOAD_FOLDER=uploads
-    ALLOWED_EXTENSIONS=png,jpg,jpeg,gif
-    ```
+    ```makefile
+DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_splitting
+TEST_DATABASE_URI=sqlite:///:memory:
+SECRET_KEY=your-secret-key
+FLASK_DEBUG=1
+FLASK_APP=app.py
+FLASK_ENV=development
+JWT_SECRET_KEY=test-secret-key
+UPLOAD_FOLDER=uploads
+ALLOWED_EXTENSIONS=png,jpg,jpeg,gif
+```
 
 - To generate the SECRET_KEY and replace the `your-secret-key`, you can use the following command:
 
-    ```
-    python3 -c "import secrets; print(secrets.token_hex(32))"
-    ```
+    ```bash
+python3 -c "import secrets; print(secrets.token_hex(32))"
+```
 - Replace `<username>`, `<password>` with your actual database credentials.
 
 - Use the JWT_SECRET_KEY from .env as is for authentication during unit testing and development.
@@ -70,15 +71,15 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 - Run the tests:
     - Ensure TEST_DATABASE_URI in .env is set to:
 
-        ```
-        TEST_DATABASE_URI=sqlite:///:memory:
-        ```
+        ```makefile
+TEST_DATABASE_URI=sqlite:///:memory:
+```
 
     - Run unit tests with:
     
-        ```
-        python -W ignore -m unittest discover -s unittests -p "test_*.py”
-        ```
+        ```bash
+python -W ignore -m unittest discover -s unittests -p "test_*.py”
+```
 
     - Please refer to the [Unittest README](../backend/unittests/README.md) for setup and more info.
 
@@ -86,15 +87,15 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 
 - Start the backend application:
 
-    ```
-    python app.py
-    ```
+    ```bash
+python app.py
+```
 
 - The backend server should now be running. You can access it at:
 
-    ```
-    http://127.0.0.1:5000/
-    ```
+    ```bash
+http://127.0.0.1:5000/
+```
 
 ## API Endpoints
 
@@ -201,3 +202,12 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 
 ## Contributing
 - We welcome contributions! Please refer to the [Main Project README](../../README.md) for contribution guidelines.
+
+## Troubleshooting
+- If you encounter any issues during setup or while running the application, refer to the [Troubleshooting Guide](../backend/TROUBLESHOOTING.md) for assistance.
+
+## API Documentation
+- For detailed API documentation, please refer to the [API Documentation](../backend/API.md) section.
+
+## License
+- This project is licensed under the MIT License. See the [LICENSE](../backend/LICENSE) file for details.
