@@ -17,7 +17,7 @@ def add_expense(user_id):
 
     amount = data.get('amount')
     description = data.get('description')
-    group_id = data.get('group_id')  # Expect group_id in the request
+    group_id = data.get('       ')  # Expect group_id in the request
 
     try:
         expense = ExpenseService.add_expense(user_id, amount, description, group_id)
