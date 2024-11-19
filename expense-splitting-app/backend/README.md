@@ -39,7 +39,7 @@ This guide explains the steps to set up the backend of the Expense Splitting App
     CREATE DATABASE expense_splitting;
     ```
 
-4. ### Update the .env file with your database credentials:
+4. ### Update/Create the .env file at root of `expense-splitting-app` folder with your database credentials:
     ```
     DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_splitting
     TEST_DATABASE_URI=sqlite:///:memory:
