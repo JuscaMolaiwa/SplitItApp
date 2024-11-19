@@ -31,10 +31,17 @@ The Expense Splitting App is a web application that allows groups of people, suc
 - **Notifications**: Firebase Cloud Messaging or Twilio SMS
 
 ## Installation
-Follow the instructions in the respective directories to set up the frontend and backend:
 
-- [Frontend Setup](frontend/README.md)
-- [Backend Setup](backend/README.md)
+- Clone the repository:
+
+   ```
+   git clone https://github.com/your-username/SplitItApp.git
+   ```
+
+- Follow the instructions in the respective directories to set up the frontend and backend:
+
+   - [Frontend Setup](expense-splitting-app/frontend/README.md)
+   - [Backend Setup](expense-splitting-app/backend/README.md)
 
 ## Usage
 1. Register a new user account.

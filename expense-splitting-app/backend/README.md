@@ -188,3 +188,7 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 - **Response**:
   - `200 OK`: List of expenses.
   - `500 Internal Server Error`: Unexpected error.
+
+
+## Contributing
+- We welcome contributions! Please refer to the main project `README` for contribution guidelines.
