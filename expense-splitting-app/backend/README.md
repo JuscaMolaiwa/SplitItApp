@@ -191,4 +191,4 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 
 
 ## Contributing
-- We welcome contributions! Please refer to the main project `README` for contribution guidelines.
+- We welcome contributions! Please refer to the main project [Main Project README](expense-splitting-app/README.md) for contribution guidelines.
