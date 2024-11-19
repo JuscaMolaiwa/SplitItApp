@@ -31,23 +31,10 @@ The Expense Splitting App is a web application that allows groups of people, suc
 - **Notifications**: Firebase Cloud Messaging or Twilio SMS
 
 ## Installation
-1. Clone the repository:
-```
-git clone https://github.com/your-username/SplitItApp.git
-```
-2. Install dependencies:
-```
-cd expense-splitting-app
-pip install -r requirements.txt
-```
-3. Set up the database:
-   - Install and configure MySQL on your system.
-   - Create a new database for the project.
-   - Update the `SQLALCHEMY_DATABASE_URI` in the `.env` file with your database credentials.
-4. Run the application:
-```
-python app.py
-```
+Follow the instructions in the respective directories to set up the frontend and backend:
+
+- [Frontend Setup](frontend/README.md)
+- [Backend Setup](backend/README.md)
 
 ## Usage
 1. Register a new user account.
