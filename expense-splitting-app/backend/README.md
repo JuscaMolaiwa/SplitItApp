@@ -53,6 +53,7 @@ This guide explains the steps to set up the backend of the Expense Splitting App
     ```
 
 - To generate the SECRET_KEY and replace the `your-secret-key`, you can use the following command:
+
     ```
     python3 -c "import secrets; print(secrets.token_hex(32))"
     ```
@@ -74,15 +75,16 @@ This guide explains the steps to set up the backend of the Expense Splitting App
 6. ### Run the Application
 
 - Start the backend application:
+
     ```
     python app.py
     ```
 
-The backend server should now be running. You can access it at:
+- The backend server should now be running. You can access it at:
 
-```
-http://127.0.0.1:5000/
-```
+    ```
+    http://127.0.0.1:5000/
+    ```
 
 ## API Endpoints
 
