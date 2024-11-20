@@ -133,18 +133,19 @@ class ExpenseService:
     @staticmethod
     def calculate_splits(split_data: Dict) -> List[Dict]:
         """Calculate splits based on split type"""
-        split_type = SplitType(split_data.get['split_type']).lower()
-        total_amount = split_data.get['amount']
-        participants = split_data.get['participants', []]
+        split_type = SplitType(split_data.get('split_type'))
+        amount = split_data['amount']
+        
+        participants = split_data.get('participants', [])
 
-        if not total_amount or total_amount <= 0:
+        if not amount or amount <= 0:
             raise ValueError("Invalid amount for split calculation")
 
         if split_type == SplitType.EQUAL.value:
-            splits = ExpenseService._calculate_equal_split(total_amount, participants)
+            splits = ExpenseService._calculate_equal_split(amount, participants)
 
         elif split_type == SplitType.PERCENTAGE.value:
-            splits = ExpenseService._calculate_percentage_split(total_amount, participants)
+            splits = ExpenseService._calculate_percentage_split(amount, participants)
         
         elif split_type == SplitType.EXACT.value:
             splits = ExpenseService._calculate_exact_split(participants)
@@ -161,9 +162,9 @@ class ExpenseService:
 
     # Function to calculate equal split
     @staticmethod
-    def _calculate_equal_split(total_amount: float, participants: List[Dict]) -> List[Dict]:
+    def _calculate_equal_split(amount: float, participants: List[Dict]) -> List[Dict]:
         """Calculate equal split"""
-        per_person_amount = total_amount / len(participants)
+        per_person_amount = amount / len(participants)
         
         return [
             {**participant, 'amount': per_person_amount} 
@@ -173,10 +174,10 @@ class ExpenseService:
 
     # Function to calculate percentage split
     @staticmethod
-    def _calculate_percentage_split(total_amount: float, participants: List[Dict]) -> List[Dict]:
+    def _calculate_percentage_split(amount: float, participants: List[Dict]) -> List[Dict]:
         """Calculate percentage split"""
         return [
-            {**participant, 'amount': total_amount * (participant.get('percentage', 0) / 100)} 
+            {**participant, 'amount': amount * (participant.get('percentage', 0) / 100)} 
             for participant in participants
         ]
 

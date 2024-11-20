@@ -15,6 +15,7 @@ def add_expense(user_id):
 
     split_data = request.get_json()
     print(f"Received data: {split_data}")  # Debug log
+    print("The toal amount is: ", split_data['amount'])
 
     # Validate input data
     if not split_data:
@@ -36,13 +37,13 @@ def add_expense(user_id):
         
 
     # Extract fields from the request body
-    amount = split_data('amount')
-    name = split_data('name')
-    description = split_data('description')
-    group_id = split_data('group_id')  # Expect group_id in the request
-    split_type = split_data('split_type')
+    amount = split_data['amount']
+    name = split_data['name']
+    description = split_data['description']
+    group_id = split_data['group_id']  # Expect group_id in the request
+    split_type = split_data['split_type']
     paid_by = split_data['paid_by']
-    participants = split_data.get('participants', [])  # Default to an empty list if not provided
+    participants = split_data.get('participants', [])# Default to an empty list if not provided
 
     try:
         # Add expense using the service
