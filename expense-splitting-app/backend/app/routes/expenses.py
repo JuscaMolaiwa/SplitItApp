@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify # type: ignore
 from ..services.expense_service import ExpenseService  # Import the ExpenseService
 from ..utils.auth_utils import get_current_user_id, login_required
 from flask_jwt_extended import jwt_required # type: ignore
+from ..models import User
 
 bp = Blueprint('expenses', __name__)
 
@@ -14,13 +15,39 @@ def add_expense(user_id):
     user_id = get_current_user_id()  # Get the current logged-in user's ID
 
     split_data = request.get_json()
-    #print(f"Received data: {split_data}")  # Debug log
-
-    # Validate input data
     if not split_data:
         return jsonify({'error': 'No data provided'}), 400
+    
+    # User ID validation
+    if not user_id or not isinstance(user_id, int):
+        return jsonify({'error': 'User not found'}), 400
+    
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 400
         
-        # Validate required fields
+    paid_by = user.full_name 
+
+    # Ensure that the creator is always included in the participants list
+    creator_participant = {
+        "user_id": user_id,
+        "name": paid_by  # You can use the fetched name here
+    }
+
+    # Debug log to check the paid_by field
+    logging.debug(f"Paid by value: {paid_by}")
+
+
+
+
+    # Check if the creator is already included in participants
+    participants = split_data.get('participants', [])
+    if not any(p['user_id'] == user_id for p in participants):
+        participants.append(creator_participant)
+
+    split_data['paid_by'] = paid_by
+        
+    # Validate required field
     required_fields = [
         'amount', 'description', 'group_id', 
         'split_type', 'paid_by', 'participants'
