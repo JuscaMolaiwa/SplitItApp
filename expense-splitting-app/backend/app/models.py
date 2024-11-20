@@ -42,7 +42,8 @@ class Expense(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id')) 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    split_type = db.Column(db.String(50), nullable=False)  
+    split_type = db.Column(db.String(50), nullable=False)
+    paid_by = db.Column(db.String(50), nullable=True)
 
     # Relationship back to Group
     group = relationship('Group', back_populates='expenses')

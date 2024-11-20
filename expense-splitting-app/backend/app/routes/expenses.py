@@ -1,4 +1,5 @@
 import logging
+from typing import Dict
 from flask import Blueprint, request, jsonify # type: ignore
 from ..services.expense_service import ExpenseService  # Import the ExpenseService
 from ..utils.auth_utils import get_current_user_id, login_required
@@ -12,25 +13,48 @@ bp = Blueprint('expenses', __name__)
 def add_expense(user_id):
     user_id = get_current_user_id()  # Get the current logged-in user's ID
 
-    data = request.get_json()
-    print(f"Received data: {data}")  # Debug log
+    split_data = request.get_json()
+    print(f"Received data: {split_data}")  # Debug log
+
+    # Validate input data
+    if not split_data:
+        return jsonify({'error': 'No data provided'}), 400
+        
+        # Validate required fields
+    required_fields = [
+        'amount', 'description', 'group_id', 
+        'split_type', 'paid_by', 'participants'
+    ]
+        
+    for field in required_fields:
+        if field not in split_data:
+            return jsonify({'error': f'Missing required field: {field}'}), 400
+        
+    # Validate participants
+    if not isinstance(split_data['participants'], list) or len(split_data['participants']) == 0:
+        return jsonify({'error': 'Invalid or empty participants list'}), 400
+        
 
     # Extract fields from the request body
-    amount = data.get('amount')
-    description = data.get('description')
-    group_id = data.get('group_id')  # Expect group_id in the request
-    group_id = data.get('group_id')
-    split_type = data.get('split_type')  
-    participants = data.get('participants', [])  # Default to an empty list if not provided
+    amount = split_data('amount')
+    name = split_data('name')
+    description = split_data('description')
+    group_id = split_data('group_id')  # Expect group_id in the request
+    split_type = split_data('split_type')
+    paid_by = split_data['paid_by']
+    participants = split_data.get('participants', [])  # Default to an empty list if not provided
 
     try:
+        # Add expense using the service
         expense = ExpenseService.add_expense(
             user_id, 
             amount, 
             description, 
             group_id, 
-            split_type=split_type, 
-            participants=participants
+            split_type=split_type,
+            paid_by=paid_by,
+            participants=participants,
+            name =name
         )
         return jsonify({'message': 'Expense added successfully', 'expense_id': expense.id}), 201
     except ValueError as ve:
