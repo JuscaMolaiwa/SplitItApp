@@ -15,12 +15,23 @@ def add_expense(user_id):
     data = request.get_json()
     print(f"Received data: {data}")  # Debug log
 
+    # Extract fields from the request body
     amount = data.get('amount')
     description = data.get('description')
-    group_id = data.get('       ')  # Expect group_id in the request
+    group_id = data.get('group_id')  # Expect group_id in the request
+    group_id = data.get('group_id')
+    split_type = data.get('split_type')  
+    participants = data.get('participants', [])  # Default to an empty list if not provided
 
     try:
-        expense = ExpenseService.add_expense(user_id, amount, description, group_id)
+        expense = ExpenseService.add_expense(
+            user_id, 
+            amount, 
+            description, 
+            group_id, 
+            split_type=split_type, 
+            participants=participants
+        )
         return jsonify({'message': 'Expense added successfully', 'expense_id': expense.id}), 201
     except ValueError as ve:
         return jsonify({'error': str(ve)}), 400
@@ -29,6 +40,14 @@ def add_expense(user_id):
     except Exception as e:
         logging.error(f"Failed to add expense: {str(e)}")  # Log the error
         return jsonify({'error': 'Failed to add expense', 'details': str(e)}), 400
+
+
+
+
+
+
+
+
 
 @bp.route('/api/expenses', methods=['GET'])
 @login_required

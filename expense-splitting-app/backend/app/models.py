@@ -41,7 +41,8 @@ class Expense(db.Model):
     description = db.Column(db.String(255), nullable=True)
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id')) 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    split_type = db.Column(db.String(50), nullable=False)  
 
     # Relationship back to Group
     group = relationship('Group', back_populates='expenses')
@@ -61,5 +62,6 @@ class ExpenseSplit(db.Model):
     expense_id = db.Column(db.Integer, db.ForeignKey('expenses.id'), nullable=False) 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) 
     amount = db.Column(db.Float, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
 
     expense = db.relationship('Expense', backref='expense_splits') 
