@@ -64,45 +64,57 @@ def add_expense(user_id):
         return jsonify({'error': 'Failed to add expense', 'details': str(e)}), 400
 
 
-
-
-
-
-
-
-
 @bp.route('/api/expenses', methods=['GET'])
 @login_required
 @jwt_required()
 def get_expenses(user_id):
     user_id = get_current_user_id()  # Get the current logged-in user's ID
 
-    # Get the group_id parameter from the query string
-    group_id = request.args.get('group_id')  # The group_id to filter the expenses by (if provided)
+    # Extract query parameters
+    group_id = request.args.get('group_id', type=int)
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)  # Default 10 items per page
+    group_id = request.args.get('group_id', type=int)
 
-    if not group_id or not group_id.isdigit():
-        return jsonify({'error': 'A valid Group ID is required to fetch expenses.'}), 400
-
-    group_id = int(group_id)  # Convert to integer after validation
+    if not group_id:
+        return jsonify({'error': 'Group ID is required'}), 400
 
     try:
-        expenses = ExpenseService.get_expenses(user_id, group_id)
-        if not expenses:
-            return jsonify({'message': 'No expenses found for this group.'}), 404
-        
-        # Format the result into a list of dictionaries to return as JSON
-        expenses_data = [{
-            'id': expense.id,
-            'amount': expense.amount,
-            'description': expense.description,
-            'created_at': expense.created_at,
-            'user_id': expense.user_id
-        } for expense in expenses]
+        # Use the ExpenseService to get expenses with pagination
+        paginated_expenses = ExpenseService.get_expenses(
+            user_id=user_id, group_id=group_id, page=page, per_page=per_page
+        )
 
-        return jsonify({'expenses': expenses_data, 'total_expenses': len(expenses)}), 200
+        # Serialize expenses for the response
+        expense_list = [
+            {
+                'id': expense.id,
+                'amount': expense.amount,
+                'description': expense.description,
+                'group_id': expense.group_id,
+                'split_type': expense.split_type,
+                'paid_by': expense.paid_by,
+                'participants': [
+                    {
+                        'user_id': split.user_id,
+                        'amount': split.amount,
+                        'name': split.name
+                    }
+                    for split in expense.expense_splits
+                ]
+            }
+            for expense in paginated_expenses.items
+        ]
 
-    except PermissionError as perm:
-        return jsonify ({'error': str(perm)}), 403
+        # Response with pagination metadata
+        return jsonify({
+            'expenses': expense_list,
+            'total': paginated_expenses.total,
+            'pages': paginated_expenses.pages,
+            'current_page': paginated_expenses.page
+        }), 200
+    except PermissionError as pe:
+        return jsonify({'error': str(pe)}), 403
     except Exception as e:
-        logging.error(f"Failed to retrieve expenses: {str(e)}")  # Log the error
-        return jsonify({'error': 'Failed to retrieve expenses', 'details': str(e)}), 400
+        logging.error(f"Failed to fetch expenses: {str(e)}")
+        return jsonify({'error': 'Failed to fetch expenses', 'details': str(e)}), 400
