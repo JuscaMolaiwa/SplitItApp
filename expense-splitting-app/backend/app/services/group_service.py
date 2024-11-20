@@ -1,8 +1,23 @@
+import base64
 from ..models import Group, GroupMember, User
 from .. import db
 import uuid
 
+SHORT_CODE_LENGTH = 7
+
 class GroupService:
+
+    @staticmethod
+    def generate_short_code():
+        
+        unique_code = uuid.uuid4()
+        # Encode UUID into URL-safe Base64, and strip padding "="
+        short_code = base64.urlsafe_b64encode(unique_code.bytes).decode('utf-8').rstrip('=')
+        short_code = short_code[:SHORT_CODE_LENGTH]
+
+        # Check if short code already exists
+        if not Group.query.filter_by(unique_code=short_code).first():
+            return short_code
 
     @staticmethod
     def create_group(user_id, group_name, description=''):
@@ -16,7 +31,7 @@ class GroupService:
             raise ValueError('A group with this name already exists.')
 
         # Generate a unique code for the group
-        unique_code = str(uuid.uuid4())  # Generate a UUID as a unique code
+        unique_code = GroupService.generate_short_code()
 
         # Create a new group
         group = Group(

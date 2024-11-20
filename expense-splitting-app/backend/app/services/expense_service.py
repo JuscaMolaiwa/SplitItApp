@@ -4,7 +4,6 @@ from typing import Any, Dict, List, Union
 from urllib import request
 from ..models import Expense, ExpenseSplit, GroupMember
 from .. import db
-from flask import request, jsonify # type: ignore
 import logging
 
 class SplitType(Enum):
@@ -120,16 +119,18 @@ class ExpenseService:
             raise
 
     @staticmethod
-    def get_expenses(user_id, group_id):
+    def get_expenses(user_id, group_id, page=1, per_page=10):
         # Check if the user belongs to the group
         is_member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
         if not is_member:
             raise PermissionError('User is not part of the selected group.')
 
-        # Query the expenses for the group
-        expenses = Expense.query.filter_by(group_id=group_id).all()
+        # Query and paginate expenses for the group
+        expenses_query = Expense.query.filter_by(group_id=group_id)
+        paginated_expenses = expenses_query.paginate(page=page, per_page=per_page, error_out=False)
 
-        return expenses
+        return paginated_expenses
+
     
     
     # A function to calculate splits based on the split type
