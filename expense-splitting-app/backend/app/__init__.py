@@ -6,9 +6,15 @@ from flask_cors import CORS # type: ignore
 from .config import DevelopmentConfig  # Change this to the appropriate config class
 from flask_jwt_extended import JWTManager # type: ignore
 from .utils import auth_utils
+import logging
 
+# Set the logging level to DEBUG to capture debug logs
+logging.basicConfig(level=logging.DEBUG)
+
+# Initialize Flask extensions
 db = SQLAlchemy()
 migrate = Migrate()
+
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
