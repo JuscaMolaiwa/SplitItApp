@@ -9,7 +9,7 @@ import logging
 class SplitType(Enum):
     EQUAL = "equal"
     PERCENTAGE = "percentage"
-    EXACT = "exact"
+    CUSTOM_AMOUNT = "custom_amount"
 
 class ExpenseService:
 
@@ -54,7 +54,7 @@ class ExpenseService:
             raise ValueError("Invalid group ID")
         
         # Split type validation
-        if not split_type or split_type.lower() not in ['equal', 'percentage', 'exact']:
+        if not split_type or split_type.lower() not in ['equal', 'percentage', 'custom_amount']:
             raise ValueError("Invalid split type")
         
         # Paid by validation
@@ -150,8 +150,8 @@ class ExpenseService:
         elif split_type == SplitType.PERCENTAGE.value:
             splits = ExpenseService._calculate_percentage_split(amount, participants)
         
-        elif split_type == SplitType.EXACT.value:
-            splits = ExpenseService._calculate_exact_split(participants)
+        elif split_type == SplitType.CUSTOM_AMOUNT.value:
+            splits = ExpenseService._calculate_custom_amount_split(amount, participants)
         
         else:
             raise ValueError("Invalid split type")
@@ -181,13 +181,28 @@ class ExpenseService:
     @staticmethod
     def _calculate_percentage_split(amount: float, participants: List[Dict]) -> List[Dict]:
         """Calculate percentage split"""
+        total_percentage = sum(p.get('percentage', 0) for p in participants)
+        if total_percentage != 100:
+            raise ValueError("Total percentage must equal 100")
         return [
-            {**participant, 'amount': amount * (participant.get('percentage', 0) / 100)} 
+            {
+                **participant,
+                'amount': round(amount * (participant['percentage'] / 100), 2)
+            }
             for participant in participants
         ]
 
-    # Function to calculate exact split
+    # Function to calculate custom split
     @staticmethod
-    def _calculate_exact_split(participants: List[Dict]) -> List[Dict]:
-        """Return exact split amounts"""
-        return participants
+    def _calculate_custom_amount_split(amount: float, participants: List[Dict]) -> List[Dict]:
+        """Calculate and return custom split amounts for each participant"""
+        total_custom_amount = sum(participant.get('amount', 0) for participant in participants)
+        
+        if total_custom_amount != amount:
+            raise ValueError("The total of custom amounts must match the total amount.")
+
+        # Assign custom amounts to each participant
+        return [
+            {**participant, 'amount': participant.get('amount', 0)}
+            for participant in participants
+        ]
