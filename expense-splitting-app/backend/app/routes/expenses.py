@@ -14,8 +14,7 @@ def add_expense(user_id):
     user_id = get_current_user_id()  # Get the current logged-in user's ID
 
     split_data = request.get_json()
-    print(f"Received data: {split_data}")  # Debug log
-    print("The toal amount is: ", split_data['amount'])
+    #print(f"Received data: {split_data}")  # Debug log
 
     # Validate input data
     if not split_data:
@@ -34,16 +33,15 @@ def add_expense(user_id):
     # Validate participants
     if not isinstance(split_data['participants'], list) or len(split_data['participants']) == 0:
         return jsonify({'error': 'Invalid or empty participants list'}), 400
-        
+    
 
     # Extract fields from the request body
     amount = split_data['amount']
-    name = split_data['name']
     description = split_data['description']
     group_id = split_data['group_id']  # Expect group_id in the request
     split_type = split_data['split_type']
     paid_by = split_data['paid_by']
-    participants = split_data.get('participants', [])# Default to an empty list if not provided
+    participants = split_data.get('participants', [])
 
     try:
         # Add expense using the service
@@ -54,8 +52,7 @@ def add_expense(user_id):
             group_id, 
             split_type=split_type,
             paid_by=paid_by,
-            participants=participants,
-            name =name
+            participants=participants
         )
         return jsonify({'message': 'Expense added successfully', 'expense_id': expense.id}), 201
     except ValueError as ve:

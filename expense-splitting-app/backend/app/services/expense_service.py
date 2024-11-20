@@ -5,6 +5,7 @@ from urllib import request
 from ..models import Expense, ExpenseSplit, GroupMember
 from .. import db
 from flask import request, jsonify # type: ignore
+import logging
 
 class SplitType(Enum):
     EQUAL = "equal"
@@ -77,7 +78,6 @@ class ExpenseService:
         if not is_member:
             raise PermissionError('User is not part of the selected group.')
         
-        
         try:
             # Create a new expense
             expense = Expense(
@@ -88,17 +88,20 @@ class ExpenseService:
                 split_type=split_type,
                 paid_by=paid_by,
             )
-        
+
             db.session.add(expense)
             db.session.commit()
 
-            # Implement a fucntion to Create expense splits
+            logging.debug(f"Calling calculate_splits with data: {{'split_type': split_type, 'amount': amount, 'participants': participants}}")
+
+            # Call calculate_splits function to generate splits
             splits = ExpenseService.calculate_splits({
                 'split_type': split_type,
                 'amount': amount,
                 'participants': participants,
             })
-        
+
+            # Iterate over each split and create an ExpenseSplit for each participant
             for split in splits:
                 expense_split = ExpenseSplit(
                     expense_id=expense.id,
@@ -133,9 +136,8 @@ class ExpenseService:
     @staticmethod
     def calculate_splits(split_data: Dict) -> List[Dict]:
         """Calculate splits based on split type"""
-        split_type = SplitType(split_data.get('split_type'))
+        split_type = split_data.get('split_type').lower()
         amount = split_data['amount']
-        
         participants = split_data.get('participants', [])
 
         if not amount or amount <= 0:
@@ -156,6 +158,8 @@ class ExpenseService:
         # Add the 'name' to each split
         for i, participant in enumerate(participants):
             splits[i]['name'] = participant['name']  # Add the name of the participant to the split
+
+        logging.debug(f"Calculated splits: {splits}")
 
         return splits
 
