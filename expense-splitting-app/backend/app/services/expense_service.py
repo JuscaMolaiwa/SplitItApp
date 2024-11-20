@@ -2,7 +2,7 @@ from enum import Enum
 import logging
 from typing import Any, Dict, List, Union
 from urllib import request
-from ..models import Expense, ExpenseSplit, GroupMember
+from ..models import Expense, ExpenseSplit, GroupMember, User
 from .. import db
 import logging
 
@@ -27,11 +27,10 @@ class ExpenseService:
         """
         Create an expense with split
         """
-
         """Comprehensive input validation"""
         # User ID validation
         if not user_id or not isinstance(user_id, int):
-            raise ValueError("Invalid user ID")
+            raise ValueError("User not found")
         
         # Amount validation
         try:
@@ -183,7 +182,7 @@ class ExpenseService:
         """Calculate percentage split"""
         total_percentage = sum(p.get('percentage', 0) for p in participants)
         if total_percentage != 100:
-            raise ValueError("Total percentage must equal 100")
+            raise ValueError("Total percentage must equal 100%")
         return [
             {
                 **participant,
