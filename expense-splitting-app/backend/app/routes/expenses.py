@@ -34,12 +34,6 @@ def add_expense(user_id):
         "name": paid_by  # You can use the fetched name here
     }
 
-    # Debug log to check the paid_by field
-    logging.debug(f"Paid by value: {paid_by}")
-
-
-
-
     # Check if the creator is already included in participants
     participants = split_data.get('participants', [])
     if not any(p['user_id'] == user_id for p in participants):
