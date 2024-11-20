@@ -48,6 +48,11 @@ class ExpenseService:
         if not description or not isinstance(description, str):
             raise ValueError("Invalid description")
         
+        # Check for duplicate description in the same group
+        existing_expense = Expense.query.filter_by(group_id=group_id, description=description).first()
+        if existing_expense:
+            raise ValueError("Duplicate description found in the same group")
+        
         # Group ID validation
         if not group_id or not isinstance(group_id, int):
             raise ValueError("Invalid group ID")
