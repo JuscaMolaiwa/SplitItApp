@@ -37,8 +37,9 @@ class GroupMember(db.Model):
 class Expense(db.Model):
     __tablename__ = 'expenses'
     id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float, nullable=False)
     description = db.Column(db.String(255), nullable=True)
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(3), nullable=False, default='ZAR')
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id')) 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

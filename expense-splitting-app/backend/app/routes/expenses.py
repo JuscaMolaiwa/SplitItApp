@@ -31,7 +31,7 @@ def add_expense(user_id):
     # Ensure that the creator is always included in the participants list
     creator_participant = {
         "user_id": user_id,
-        "name": paid_by  # You can use the fetched name here
+        "name": paid_by 
     }
 
     # Check if the creator is already included in participants
@@ -51,6 +51,13 @@ def add_expense(user_id):
         if field not in split_data:
             return jsonify({'error': f'Missing required field: {field}'}), 400
         
+    # Validate currency
+    if 'currency' not in split_data or not isinstance(split_data['currency'], str):
+        raise ValueError("Invalid or missing currency")
+    if len(split_data['currency']) != 3 or not split_data['currency'].isalpha():
+        raise ValueError("Currency must be a valid 3-letter ISO code")
+
+        
     # Validate participants
     if not isinstance(split_data['participants'], list) or len(split_data['participants']) == 0:
         return jsonify({'error': 'Invalid or empty participants list'}), 400
@@ -62,6 +69,7 @@ def add_expense(user_id):
     group_id = split_data['group_id']  # Expect group_id in the request
     split_type = split_data['split_type']
     paid_by = split_data['paid_by']
+    currency = split_data['currency'] #Added curency
     participants = split_data.get('participants', [])
 
     try:
@@ -73,7 +81,8 @@ def add_expense(user_id):
             group_id, 
             split_type=split_type,
             paid_by=paid_by,
-            participants=participants
+            participants=participants,
+            currency = currency
         )
         return jsonify({'message': 'Expense added successfully', 'expense_id': expense.id}), 201
     except ValueError as ve:
@@ -96,6 +105,7 @@ def get_expenses(user_id):
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)  # Default 10 items per page
     group_id = request.args.get('group_id', type=int)
+    currency = request.args.get('currency',default= 'ZAR', type=str)
 
     if not group_id:
         return jsonify({'error': 'Group ID is required'}), 400
@@ -115,6 +125,7 @@ def get_expenses(user_id):
                 'group_id': expense.group_id,
                 'split_type': expense.split_type,
                 'paid_by': expense.paid_by,
+                'currency': expense.currency,
                 'participants': [
                     {
                         'user_id': split.user_id,

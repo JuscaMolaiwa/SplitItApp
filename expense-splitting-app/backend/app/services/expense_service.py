@@ -21,12 +21,13 @@ class ExpenseService:
         group_id: int, 
         split_type: str,
         paid_by: str,
+        currency: str,
         participants: List[Dict[str, Any]],
         ) -> Expense:
-
         """
         Create an expense with split
         """
+
         """Comprehensive input validation"""
         # User ID validation
         if not user_id or not isinstance(user_id, int):
@@ -65,6 +66,15 @@ class ExpenseService:
         if not paid_by or not isinstance(paid_by, str):
             raise ValueError("Invalid paid by")
         
+        # Currency validation
+        if not currency or not isinstance(currency, str):
+            raise ValueError("Currency is required")
+        
+         # Validate against ISO 4217 codes
+        valid_currencies = {'USD', 'EUR', 'ZAR', 'GBP'} 
+        if currency.upper() not in valid_currencies:
+            raise ValueError("Invalid currency. Must be a valid ISO 4217 code.")
+        
         # Participants validation
         if not participants or not isinstance(participants, list):
             raise ValueError("Invalid participants")
@@ -90,6 +100,7 @@ class ExpenseService:
                 user_id=user_id,  # Add user_id to associate with the expense
                 split_type=split_type,
                 paid_by=paid_by,
+                currency = currency.upper()
             )
 
             db.session.add(expense)
