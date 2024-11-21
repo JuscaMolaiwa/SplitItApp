@@ -11,6 +11,13 @@ class SplitType(Enum):
     PERCENTAGE = "percentage"
     CUSTOM_AMOUNT = "custom_amount"
 
+CURRENCY_SYMBOLS = {
+    "ZAR": "R",
+    "USD": "$",
+    "EUR": "€",
+    "GBP": "£"
+    }
+
 class ExpenseService:
 
     @staticmethod
@@ -69,9 +76,8 @@ class ExpenseService:
         # Currency validation
         if not currency or not isinstance(currency, str):
             raise ValueError("Currency is required")
-        
-         # Validate against ISO 4217 codes
-        valid_currencies = {'USD', 'EUR', 'ZAR', 'GBP'} 
+
+        valid_currencies = set(CURRENCY_SYMBOLS.keys())
         if currency.upper() not in valid_currencies:
             raise ValueError("Invalid currency. Must be a valid ISO 4217 code.")
         
@@ -100,7 +106,7 @@ class ExpenseService:
                 user_id=user_id,  # Add user_id to associate with the expense
                 split_type=split_type,
                 paid_by=paid_by,
-                currency = currency.upper()
+                currency=currency.upper(),
             )
 
             db.session.add(expense)
@@ -221,3 +227,12 @@ class ExpenseService:
             {**participant, 'amount': participant.get('amount', 0)}
             for participant in participants
         ]
+    
+
+    def format_amount_with_currency(amount: Union[int, float], currency: str) -> str:
+        """
+        Format the amount with the corresponding currency symbol.
+        """
+        currency_symbol = CURRENCY_SYMBOLS.get(currency.upper(), currency.upper())  # Default to the currency code
+        return f"{currency_symbol}{amount:.2f}"
+

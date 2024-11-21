@@ -105,7 +105,6 @@ def get_expenses(user_id):
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)  # Default 10 items per page
     group_id = request.args.get('group_id', type=int)
-    currency = request.args.get('currency',default= 'ZAR', type=str)
 
     if not group_id:
         return jsonify({'error': 'Group ID is required'}), 400
@@ -120,16 +119,16 @@ def get_expenses(user_id):
         expense_list = [
             {
                 'id': expense.id,
-                'amount': expense.amount,
                 'description': expense.description,
+                'amount': ExpenseService.format_amount_with_currency(expense.amount, expense.currency),
+                'currency': expense.currency,
                 'group_id': expense.group_id,
                 'split_type': expense.split_type,
                 'paid_by': expense.paid_by,
-                'currency': expense.currency,
                 'participants': [
                     {
                         'user_id': split.user_id,
-                        'amount': split.amount,
+                        'amount': ExpenseService.format_amount_with_currency(split.amount, expense.currency),
                         'name': split.name
                     }
                     for split in expense.expense_splits
