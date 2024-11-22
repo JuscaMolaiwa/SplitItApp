@@ -99,11 +99,13 @@ http://127.0.0.1:5000/
 
 ## API Endpoints
 
+# User Management
+
 ### User Login
 - **Endpoint**: `POST /api/login`
 - **Description**: Authenticates a user and returns a JWT token.
 - **Authorization**: No authentication required.
-- **Request Body**: JSON object containing username and password.
+- **Request Body**: JSON object containing `username` and `password`.
 - **Response**:
   - `200 OK`: JWT token returned.
   - `400 Bad Request`: Error details if login fails.
@@ -156,6 +158,9 @@ http://127.0.0.1:5000/
   - `401 Unauthorized`: If not authenticated.
   - `500 Internal Server Error`: Unexpected error.
 
+
+# Group Management
+
 ### Create a New Group
 - **Endpoint**: `POST /api/groups`
 - **Description**: Creates a new group.
@@ -182,6 +187,8 @@ http://127.0.0.1:5000/
   - `200 OK`: List of group members.
   - `500 Internal Server Error`: Unexpected error.
 
+# Expense Management
+
 ### Create a New Expense
 - **Endpoint**: `POST /api/expenses`
 - **Description**: Creates a new expense.
@@ -200,14 +207,19 @@ http://127.0.0.1:5000/
   - `200 OK`: List of expenses.
   - `500 Internal Server Error`: Unexpected error.
 
+### Note: Use tools like Postman or cURL to test these endpoints.
+
 ## Contributing
 - We welcome contributions! Please refer to the [Main Project README](../../README.md) for contribution guidelines.
 
 ## Troubleshooting
-- If you encounter any issues during setup or while running the application, refer to the [Troubleshooting Guide](../backend/TROUBLESHOOTING.md) for assistance.
+- If you encounter any issues during setup or while running the application
+  - Verify Python, MySQL, and environment variable configuration.
+  - Refer to the [Troubleshooting Guide](../backend/TROUBLESHOOTING.md) for assistance.
 
 ## API Documentation
 - For detailed API documentation, please refer to the [API Documentation](../backend/API.md) section.
 
 ## License
 - This project is licensed under the MIT License. See the [LICENSE](../backend/LICENSE) file for details.
+
