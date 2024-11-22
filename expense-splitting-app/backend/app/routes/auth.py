@@ -10,9 +10,14 @@ def register():
     """A method to register a new user."""
     data = request.get_json()
 
-    # Ensure required fields are present
-    if not all(key in data for key in ('username', 'email', 'password')):
-        return jsonify({'error': 'Missing required fields: username, email, and password'}), 400
+    # Required fields for registration
+    required_fields = {'username', 'email', 'password'}
+
+    # Find missing fields
+    missing_fields = required_fields - data.keys() if data else required_fields
+
+    if missing_fields:
+        return jsonify({'error': 'Missing required fields', 'missing_fields': list(missing_fields)}), 400
     
     try:
         user = UserService.register_user(

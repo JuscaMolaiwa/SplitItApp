@@ -228,11 +228,13 @@ class ExpenseService:
             for participant in participants
         ]
     
-
+    # Function to add currency to the amount
     def format_amount_with_currency(amount: Union[int, float], currency: str) -> str:
         """
         Format the amount with the corresponding currency symbol.
         """
         currency_symbol = CURRENCY_SYMBOLS.get(currency.upper(), currency.upper())  # Default to the currency code
         return f"{currency_symbol}{amount:.2f}"
+    
+    
 
