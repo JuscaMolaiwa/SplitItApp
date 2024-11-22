@@ -99,7 +99,7 @@ http://127.0.0.1:5000/
 
 ## API Endpoints
 
-# User Management
+## User Management
 
 ### User Login
 - **Endpoint**: `POST /api/login`
@@ -159,7 +159,7 @@ http://127.0.0.1:5000/
   - `500 Internal Server Error`: Unexpected error.
 
 
-# Group Management
+## Group Management
 
 ### Create a New Group
 - **Endpoint**: `POST /api/groups`
@@ -187,7 +187,7 @@ http://127.0.0.1:5000/
   - `200 OK`: List of group members.
   - `500 Internal Server Error`: Unexpected error.
 
-# Expense Management
+## Expense Management
 
 ### Create a New Expense
 - **Endpoint**: `POST /api/expenses`
