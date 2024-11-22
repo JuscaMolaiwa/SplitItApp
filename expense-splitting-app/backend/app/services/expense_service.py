@@ -11,6 +11,13 @@ class SplitType(Enum):
     PERCENTAGE = "percentage"
     CUSTOM_AMOUNT = "custom_amount"
 
+CURRENCY_SYMBOLS = {
+    "ZAR": "R",
+    "USD": "$",
+    "EUR": "€",
+    "GBP": "£"
+    }
+
 class ExpenseService:
 
     @staticmethod
@@ -21,12 +28,13 @@ class ExpenseService:
         group_id: int, 
         split_type: str,
         paid_by: str,
+        currency: str,
         participants: List[Dict[str, Any]],
         ) -> Expense:
-
         """
         Create an expense with split
         """
+
         """Comprehensive input validation"""
         # User ID validation
         if not user_id or not isinstance(user_id, int):
@@ -65,6 +73,14 @@ class ExpenseService:
         if not paid_by or not isinstance(paid_by, str):
             raise ValueError("Invalid paid by")
         
+        # Currency validation
+        if not currency or not isinstance(currency, str):
+            raise ValueError("Currency is required")
+
+        valid_currencies = set(CURRENCY_SYMBOLS.keys())
+        if currency.upper() not in valid_currencies:
+            raise ValueError("Invalid currency. Must be a valid ISO 4217 code.")
+        
         # Participants validation
         if not participants or not isinstance(participants, list):
             raise ValueError("Invalid participants")
@@ -90,6 +106,7 @@ class ExpenseService:
                 user_id=user_id,  # Add user_id to associate with the expense
                 split_type=split_type,
                 paid_by=paid_by,
+                currency=currency.upper(),
             )
 
             db.session.add(expense)
@@ -210,3 +227,14 @@ class ExpenseService:
             {**participant, 'amount': participant.get('amount', 0)}
             for participant in participants
         ]
+    
+    # Function to add currency to the amount
+    def format_amount_with_currency(amount: Union[int, float], currency: str) -> str:
+        """
+        Format the amount with the corresponding currency symbol.
+        """
+        currency_symbol = CURRENCY_SYMBOLS.get(currency.upper(), currency.upper())  # Default to the currency code
+        return f"{currency_symbol}{amount:.2f}"
+    
+    
+
