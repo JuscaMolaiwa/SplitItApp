@@ -22,7 +22,8 @@ class ProfileService:
     def update_user_profile(current_user_id, full_name, bio, profile_image):
         user = User.query.get_or_404(current_user_id)
 
-        # Update user profile fields
+        # Update user profile fields 
+        # these are the fields that are required to be filled
         user.full_name = full_name
         user.bio = bio
 

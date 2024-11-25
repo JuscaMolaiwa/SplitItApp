@@ -4,10 +4,12 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Technical Stack](#technical-stack)
-- [Installation](#installation)
+- [Installation and Setup](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
+- [Roadmap](#roadmap)
+- [Acknowledgments](#acknowledgments)
 
 ## Introduction
 The Expense Splitting App is a web application that allows groups of people, such as roommates or friends, to easily track and split expenses. It provides features for managing expenses, calculating balances, and facilitating payments between group members.
@@ -31,23 +33,17 @@ The Expense Splitting App is a web application that allows groups of people, suc
 - **Notifications**: Firebase Cloud Messaging or Twilio SMS
 
 ## Installation
-1. Clone the repository:
+
+- Clone the repository:
+
+```bash
+   git clone https://github.com/your-username/SplitItApp.git
 ```
-git clone https://github.com/your-username/SplitItApp.git
-```
-2. Install dependencies:
-```
-cd expense-splitting-app
-pip install -r requirements.txt
-```
-3. Set up the database:
-   - Install and configure MySQL on your system.
-   - Create a new database for the project.
-   - Update the `SQLALCHEMY_DATABASE_URI` in the `app.py` file with your database credentials.
-4. Run the application:
-```
-python app.py
-```
+
+- Follow the instructions in the respective directories to set up the frontend and backend:
+
+   - [Frontend Setup](expense-splitting-app/frontend/README.md)
+   - [Backend Setup](expense-splitting-app/backend/README.md)
 
 ## Usage
 1. Register a new user account.
@@ -55,109 +51,6 @@ python app.py
 3. Add expenses to the group, either manually or by uploading receipts.
 4. View the current balances and make payments to settle debts.
 5. Receive notifications for payment reminders and other important updates.
-
-## API Endpoints
-
-### User Login
-- **Endpoint**: `POST /api/login`
-- **Description**: Authenticates a user and returns a JWT token.
-- **Authorization**: No authentication required.
-- **Request Body**: JSON object containing username and password.
-- **Response**:
-  - `200 OK`: JWT token returned.
-  - `400 Bad Request`: Error details if login fails.
-  - `401 Unauthorized`: Invalid credentials.
-
-### Register a New User
-- **Endpoint**: `POST /api/register`
-- **Description**: Registers a new user account.
-- **Authorization**: No authentication required.
-- **Request Body**: JSON object containing user details (e.g., username, email, password).
-- **Response**:
-  - `201 Created`: User registered successfully.
-  - `409 Conflict`: Error details if registration fails.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Get User Information
-- **Endpoint**: `GET /api/user`
-- **Description**: Retrieves information about the authenticated user.
-- **Authorization**: Requires user authentication.
-- **Response**:
-  - `200 OK`: User information.
-  - `401 Unauthorized`: If not authenticated.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Get All Users
-- **Endpoint**: `GET /api/users`
-- **Description**: Retrieves a list of all users.
-- **Authorization**: Requires admin privileges.
-- **Response**:
-  - `200 OK`: List of users.
-  - `403 Forbidden`: If not an admin.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Update User Profile
-- **Endpoint**: `PUT /api/profile`
-- **Description**: Updates the authenticated user's profile information.
-- **Authorization**: Requires user authentication.
-- **Request Body**: JSON object containing updated profile information (e.g., full_name, email).
-- **Response**:
-  - `200 OK`: Profile updated successfully.
-  - `400 Bad Request`: Error details if the profile cannot be updated.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Get User Profile
-- **Endpoint**: `GET /api/profile`
-- **Description**: Retrieves the authenticated user's profile information.
-- **Authorization**: Requires user authentication.
-- **Response**:
-  - `200 OK`: User profile details.
-  - `401 Unauthorized`: If not authenticated.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Create a New Group
-- **Endpoint**: `POST /api/groups`
-- **Description**: Creates a new group.
-- **Authorization**: Requires user authentication.
-- **Request Body**: JSON object containing group details (e.g., group_name).
-- **Response**:
-  - `201 Created`: Group created successfully.
-  - `400 Bad Request`: Error details if the group cannot be created.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Get All Groups
-- **Endpoint**: `GET /api/groups`
-- **Description**: Retrieves a list of all groups.
-- **Authorization**: Requires user authentication.
-- **Response**:
-  - `200 OK`: List of groups.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Get Group Members
-- **Endpoint**: `GET /api/groups/members`
-- **Description**: Retrieves a list of members in a specified group.
-- **Authorization**: Requires user authentication.
-- **Response**:
-  - `200 OK`: List of group members.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Create a New Expense
-- **Endpoint**: `POST /api/expenses`
-- **Description**: Creates a new expense.
-- **Authorization**: Requires user authentication.
-- **Request Body**: JSON object containing expense details (e.g., amount, description, group_id).
-- **Response**:
-  - `201 Created`: Expense created successfully.
-  - `400 Bad Request`: Error details if the expense cannot be created.
-  - `500 Internal Server Error`: Unexpected error.
-
-### Get All Expenses
-- **Endpoint**: `GET /api/expenses`
-- **Description**: Retrieves a list of all expenses.
-- **Authorization**: Requires user authentication.
-- **Response**:
-  - `200 OK`: List of expenses.
-  - `500 Internal Server Error`: Unexpected error.
 
 ## Contributing
 We welcome contributions to the Expense Splitting App project. If you would like to contribute, please follow these steps:
@@ -167,6 +60,14 @@ We welcome contributions to the Expense Splitting App project. If you would like
 3. Make your changes and commit them.
 4. Push your branch to your forked repository.
 5. Submit a pull request to the original repository.
+
+## Roadmap
+- Implement machine learning-based expense categorization
+- Integrate with popular calendar apps for event-based expense tracking
+- Develop a mobile app for on-the-go expense tracking
+
+## Acknowledgments
+We would like to thank the open-source community for their contributions to the project.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).

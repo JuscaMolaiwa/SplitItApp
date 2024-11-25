@@ -79,8 +79,13 @@ const JoinGroupForm = () => {
 
     // Fetch joined groups on component mount
     useEffect(() => {
+<<<<<<< HEAD
         fetchJoinedGroups();
     }, []);
+=======
+        fetchJoinedGroups(); // Fetch joined groups when the component mounts
+    });
+>>>>>>> a86883a65b6e35355b7ba6518f6b87cd5c6bcb4a
 
     return (
         <div className="p-6 space-y-6 bg-white rounded-md shadow-lg">
