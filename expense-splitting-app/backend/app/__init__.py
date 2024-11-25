@@ -49,7 +49,7 @@ def create_app(config_class=DevelopmentConfig):
     migrate.init_app(app, db)
 
     # Import and register blueprints or routes
-    from .routes import auth, logout, groups, profile, expenses, user, admin
+    from .routes import auth, logout, groups, profile, expenses, user, admin, payment
     app.register_blueprint(auth.bp)
     app.register_blueprint(logout.bp)
     app.register_blueprint(groups.bp)
@@ -57,15 +57,6 @@ def create_app(config_class=DevelopmentConfig):
     app.register_blueprint(expenses.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(admin.bp)
-
-
-    @app.errorhandler(Exception)
-    def handle_exception(e):
-        """Handle all exceptions and return a JSON response."""
-        response = {
-            "error": str(e),
-            "message": "An unexpected error occurred."
-        }
-        return jsonify(response), 500
+    app.register_blueprint(payment.bp)
     
     return app

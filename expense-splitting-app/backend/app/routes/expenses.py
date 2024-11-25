@@ -5,6 +5,7 @@ from ..services.expense_service import ExpenseService  # Import the ExpenseServi
 from ..utils.auth_utils import get_current_user_id, login_required
 from flask_jwt_extended import jwt_required # type: ignore
 from ..models import User
+import stripe # type: ignore
 
 bp = Blueprint('expenses', __name__)
 
@@ -92,7 +93,6 @@ def add_expense(user_id):
     except Exception as e:
         logging.error(f"Failed to add expense: {str(e)}")  # Log the error
         return jsonify({'error': 'Failed to add expense', 'details': str(e)}), 400
-
 
 @bp.route('/api/expenses', methods=['GET'])
 @login_required

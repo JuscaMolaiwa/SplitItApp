@@ -136,8 +136,8 @@ class ExpenseService:
         
         except Exception as e:
             db.session.rollback()
-            logging.error(f"Failed to add expense: {str(e)}")
-            raise
+            logging.error(f"Database error: {str(e)}")
+            raise ValueError("An error occurred while processing the expense")
 
     @staticmethod
     def get_expenses(user_id, group_id, page=1, per_page=10):
@@ -229,6 +229,7 @@ class ExpenseService:
         ]
     
     # Function to add currency to the amount
+    @staticmethod
     def format_amount_with_currency(amount: Union[int, float], currency: str) -> str:
         """
         Format the amount with the corresponding currency symbol.
@@ -236,5 +237,3 @@ class ExpenseService:
         currency_symbol = CURRENCY_SYMBOLS.get(currency.upper(), currency.upper())  # Default to the currency code
         return f"{currency_symbol}{amount:.2f}"
     
-    
-

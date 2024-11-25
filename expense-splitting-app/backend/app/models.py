@@ -1,3 +1,4 @@
+from sqlalchemy import Index # type: ignore
 from . import db
 from datetime import datetime
 from sqlalchemy.orm import relationship  # type: ignore
@@ -67,3 +68,27 @@ class ExpenseSplit(db.Model):
     name = db.Column(db.String(100), nullable=False)
 
     expense = db.relationship('Expense', backref='expense_splits') 
+
+class PaymentIntent(db.Model):
+    __tablename__ = 'payment_intents'
+    
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)  # Corrected ForeignKey
+
+    payment_intent_id = db.Column(db.String(255), unique=True, nullable=False, index=True) 
+    status = db.Column(db.String(50), default='pending')
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(3), nullable=False, default='ZAR')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    payment_method_types = db.Column(db.Text, nullable=False) 
+    payment_method_details = db.Column(db.Text, nullable=False)
+    card_type = db.Column(db.String(50), nullable=True)
+    card_last4 = db.Column(db.String(4), nullable=True)
+
+    user = db.relationship('User', backref='payment_intents')
+    
+    Index('ix_card_last4', 'card_last4') 
+
+    

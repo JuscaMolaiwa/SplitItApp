@@ -7,6 +7,7 @@ class Config:
     """Base configuration."""
     SECRET_KEY = os.getenv('SECRET_KEY', 'SECRET_KEY')  # Use a default for development
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'DATABASE_URI')  # Default to SQLite
+    STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER')
     ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:3000')  # Default origin
