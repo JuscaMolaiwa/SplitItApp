@@ -40,7 +40,7 @@ pip install -r requirements.txt
 - Install and configure MySQL on your system.
 - Create a new database for the project:
 ```sql
-CREATE DATABASE expense_splitting;
+CREATE DATABASE expense_splits;
 ```
 
 4. ### Update/Create the .env file at root of `expense-splitting-app` folder with your database credentials:
@@ -210,11 +210,11 @@ http://127.0.0.1:5000/
 ### Note: Use tools like Postman or cURL to test these endpoints.
 
 ## Contributing
-- We welcome contributions! Please refer to the [Main Project README](../../README.md) for contribution guidelines.
+- We welcome contributions! Please look at the [Main Project README](.. //README.md) for contribution guidelines.
 
 ## Troubleshooting
 - If you encounter any issues during setup or while running the application
-  - Verify Python, MySQL, and environment variable configuration.
+  - Verify the configuration of Python, MySQL, and environment variables.
   - Refer to the [Troubleshooting Guide](../backend/TROUBLESHOOTING.md) for assistance.
 
 ## API Documentation
