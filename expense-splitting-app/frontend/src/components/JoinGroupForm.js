@@ -9,7 +9,6 @@ const JoinGroupForm = () => {
     const [loading, setLoading] = useState(false);
     const [joinedGroups, setJoinedGroups] = useState([]);
 
-    // Fetch joined groups
     const fetchJoinedGroups = async () => {
         const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
         if (!token) {
@@ -20,9 +19,7 @@ const JoinGroupForm = () => {
         try {
             const response = await fetch('http://127.0.0.1:5000/api/groups', {
                 method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             const result = await response.json();
@@ -37,7 +34,6 @@ const JoinGroupForm = () => {
         }
     };
 
-    // Handle group join request
     const handleJoinGroup = async (event) => {
         event.preventDefault();
         setErrorMessage('');
@@ -51,7 +47,6 @@ const JoinGroupForm = () => {
 
         try {
             setLoading(true);
-
             const response = await fetch('http://127.0.0.1:5000/api/groups/join', {
                 method: 'POST',
                 headers: {
@@ -65,7 +60,7 @@ const JoinGroupForm = () => {
             if (response.ok) {
                 setMessage(result.message || 'Successfully joined the group!');
                 setUniqueCode('');
-                fetchJoinedGroups(); // Refresh the list of joined groups
+                fetchJoinedGroups();
             } else {
                 setErrorMessage(result.error || 'Failed to join the group.');
             }
@@ -77,15 +72,9 @@ const JoinGroupForm = () => {
         }
     };
 
-    // Fetch joined groups on component mount
     useEffect(() => {
-<<<<<<< HEAD
         fetchJoinedGroups();
     }, []);
-=======
-        fetchJoinedGroups(); // Fetch joined groups when the component mounts
-    });
->>>>>>> a86883a65b6e35355b7ba6518f6b87cd5c6bcb4a
 
     return (
         <div className="p-6 space-y-6 bg-white rounded-md shadow-lg">
@@ -113,8 +102,8 @@ const JoinGroupForm = () => {
                 >
                     {loading ? 'Joining...' : 'Join Group'}
                 </button>
-                {message && <div className="text-green-600">{message}</div>}
-                {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+                {message && <div aria-live="polite" className="text-green-600">{message}</div>}
+                {errorMessage && <div aria-live="polite" className="text-red-600">{errorMessage}</div>}
             </form>
 
             <h2 className="text-lg font-semibold">Groups Joined:</h2>
@@ -122,9 +111,13 @@ const JoinGroupForm = () => {
                 <table className="w-full bg-white border rounded-lg shadow-md">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="px-4 py-2 text-left">Group Name <FaUsers className="inline-block text-indigo-600 ml-2" /></th>
+                            <th className="px-4 py-2 text-left">
+                                Group Name <FaUsers className="inline-block text-indigo-600 ml-2" />
+                            </th>
                             <th className="px-4 py-2 text-left">Description</th>
-                            <th className="px-4 py-2 text-left">Actions <FaCog className="inline-block text-indigo-600 ml-2" /></th>
+                            <th className="px-4 py-2 text-left">
+                                Actions <FaCog className="inline-block text-indigo-600 ml-2" />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

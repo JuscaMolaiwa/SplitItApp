@@ -1,14 +1,11 @@
 import os
-from dotenv import load_dotenv # type: ignore
-
-load_dotenv()  # Load environment variables from a .env file
 
 class Config:
     """Base configuration."""
-    SECRET_KEY = os.getenv('SECRET_KEY', 'SECRET_KEY')  # Use a default for development
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'DATABASE_URI')  # Default to SQLite
-    UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER')
-    ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
+    SECRET_KEY = os.getenv('SECRET_KEY', 'your_default_secret_key')  # Default to 'your_default_secret_key' for development
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///default.db')  # Default to SQLite
+    UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', './uploads')  # Default upload folder
+    ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS', 'pdf,jpg,png').split(',')  # Default file types
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:3000')  # Default origin
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -20,13 +17,12 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     """Testing configuration."""
     TESTING = True
-    CORS_ORIGINS = '*' 
-    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URI')
+    CORS_ORIGINS = '*'  # Allow all origins in testing
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", 'your_test_jwt_secret')  # Default JWT secret for testing
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URI', 'sqlite:///test.db')  # Default to SQLite for testing
 
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'production-database-uri'
-    CORS_ORIGINS = ['https://yourdomain.com']  # Specific production origins
-    
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///production.db')  # Default to SQLite for production if not set
+    CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'https://yourdomain.com').split(',')  # Specify production origins
