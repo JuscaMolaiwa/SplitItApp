@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const UserRegistration = ({onRegisterSuccess}) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [profileImage, setProfileImage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+const UserRegistration = ({ onRegisterSuccess }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false); 
+  const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate(); // Initialize navigate for redirection
 
   const handleRegistration = async () => {
     if (!username || !password || !email || !fullName) {
-      setErrorMessage('Username, password, email, and full name are required.');
+      setErrorMessage("Username, password, email, and full name are required.");
       return;
     }
 
@@ -33,14 +33,14 @@ const UserRegistration = ({onRegisterSuccess}) => {
     }
 
     setLoading(true);
-    setErrorMessage('');
+    setErrorMessage("");
 
     try {
       // Sending data to the backend using fetch
-      const response = await fetch('http://127.0.0.1:5000/api/register', {
-        method: 'POST',
+      const response = await fetch("http://127.0.0.1:5000/api/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
@@ -52,19 +52,17 @@ const UserRegistration = ({onRegisterSuccess}) => {
       const data = await response.json();
 
       if (response.ok) {
-        
-      // Store token in either localStorage or sessionStorage
-      if (rememberMe) {
-        localStorage.setItem('auth_token', data.token);
-      } else {
-        sessionStorage.setItem('auth_token', data.token);
-      }
-      onRegisterSuccess();
-        
-      alert('User registered successfully');
+        // Store token in either localStorage or sessionStorage
+        if (rememberMe) {
+          localStorage.setItem("auth_token", data.token);
+        } else {
+          sessionStorage.setItem("auth_token", data.token);
+        }
+        onRegisterSuccess();
 
+        alert("User registered successfully");
       } else {
-        setErrorMessage(data.error || 'Registration failed');
+        setErrorMessage(data.error || "Registration failed");
       }
     } catch (error) {
       setErrorMessage(`An error occurred. Please try again. ${error.message}`);
@@ -149,9 +147,11 @@ const UserRegistration = ({onRegisterSuccess}) => {
       <button
         onClick={handleRegistration}
         disabled={loading}
-        className={`bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md ${
+          loading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
-        {loading ? 'Registering...' : 'Register'}
+        {loading ? "Registering..." : "Register"}
       </button>
     </div>
   );
