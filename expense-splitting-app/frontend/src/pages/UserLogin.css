@@ -60,20 +60,22 @@
 }
 
 .login-button {
-  background-color: #4caf50;
-  color: #fff;
+  background-color: #2563eb; /* Nice shade of blue */
+  color: white;
   padding: 10px 20px;
-  font-size: 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .login-button:hover {
-  background-color: #3e8e41;
+  background-color: #1d4ed8; /* Darker blue on hover */
 }
 
 .login-button:disabled {
-  opacity: 0.5;
+  background-color: #93c5fd; /* Lighter blue when disabled */
   cursor: not-allowed;
 }
