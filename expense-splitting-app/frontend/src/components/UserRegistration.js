@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../pages/UserRegistration.css";
 
 const UserRegistration = ({ onRegisterSuccess }) => {
   const [username, setUsername] = useState("");
@@ -61,6 +62,7 @@ const UserRegistration = ({ onRegisterSuccess }) => {
         onRegisterSuccess();
 
         alert("User registered successfully");
+        navigate("/app");
       } else {
         setErrorMessage(data.error || "Registration failed");
       }

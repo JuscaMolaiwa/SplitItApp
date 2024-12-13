@@ -48,15 +48,22 @@
 .remember-me {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 16px 0;
+  gap: 8px;
+  padding: 4px 0;
 }
 
 .remember-me input[type="checkbox"] {
-  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
 .remember-me label {
-  font-size: 16px;
+  font-size: 14px;
+  color: #4b5563;
+  cursor: pointer;
+  user-select: none;
 }
 
 .login-button {

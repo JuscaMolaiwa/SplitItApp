@@ -68,6 +68,13 @@ const UserLogin = ({ onLoginSuccess }) => {
     }
   };
 
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
+    if (!rememberMe === false) {
+      localStorage.removeItem("auth_token");
+    }
+  };
+
   return (
     <div className="container">
       <h2 className="header">User Login</h2>
@@ -101,7 +108,7 @@ const UserLogin = ({ onLoginSuccess }) => {
           type="checkbox"
           id="remember-me"
           checked={rememberMe}
-          onChange={() => setRememberMe(!rememberMe)}
+          onChange={handleRememberMeChange}
         />
         <label htmlFor="remember-me">Remember Me</label>
       </div>
