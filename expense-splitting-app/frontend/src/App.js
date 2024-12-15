@@ -1,82 +1,116 @@
-import React, { useState, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
-import UserLogin from './components/UserLogin';
-import UserRegistration from './components/UserRegistration';
-import UserSystemApp from './components/UserSystemApp';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import CreateGroup from './pages/CreateGroup';
-import GroupDetail from './pages/GroupDetail';
+import React, { useState, Suspense, lazy } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+// Lazy load pages and components for better performance
+const UserLogin = lazy(() => import("./components/UserLogin"));
+const UserRegistration = lazy(() => import("./components/UserRegistration"));
+const UserSystemApp = lazy(() => import("./components/UserSystemApp"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const CreateGroup = lazy(() => import("./pages/CreateGroup"));
+const GroupDetail = lazy(() => import("./pages/GroupDetail"));
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLoginSuccess = () => {
-    setIsAuthenticated(true);
+  const handleLoginSuccess = () => setIsAuthenticated(true);
+  const handleLogout = () => setIsAuthenticated(false);
+
+  // PublicRoute for guests
+  const PublicRoute = ({ children }) => {
+    return !isAuthenticated ? children : <Navigate to="/app" />;
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
+  // PrivateRoute for authenticated users
+  const PrivateRoute = ({ children }) => {
+    return isAuthenticated ? children : <Navigate to="/" />;
   };
 
   return (
     <Router>
-      <Suspense fallback={<div>Loading...</div>}>
-        <div className="app-container">
-          <h1 className="app-title">SplitItApp</h1>
-          <Navbar />
-          <main>
+      <Suspense fallback={<div className="h-screen flex items-center justify-center">Loading...</div>}>
+        <div className="app-container bg-gray-100 min-h-screen flex flex-col">
+          <header>
+            <h1 className="text-3xl font-bold text-center py-4">SplitItApp</h1>
+            <Navbar />
+          </header>
+
+          <main className="flex-1 container mx-auto p-4">
             <Routes>
-              <Route 
-                path="/" 
+              {/* Public Routes */}
+              <Route
+                path="/"
                 element={
-                  !isAuthenticated ? (
-                    <div className="form-container">
+                  <PublicRoute>
+                    <div className="form-container max-w-md mx-auto">
                       <UserLogin onLoginSuccess={handleLoginSuccess} />
-                      <p className="redirect-text">
-                        Don't have an account? <Link to="/register" className="link">Register</Link>
+                      <p className="text-center mt-4 text-sm">
+                        Don't have an account?{" "}
+                        <Link to="/register" className="text-blue-600 hover:underline">
+                          Register
+                        </Link>
                       </p>
                     </div>
-                  ) : (
-                    <Navigate to="/app" />
-                  )
-                } 
+                  </PublicRoute>
+                }
               />
-              <Route 
-                path="/register" 
+              <Route
+                path="/register"
                 element={
-                  !isAuthenticated ? (
-                    <div className="form-container">
+                  <PublicRoute>
+                    <div className="form-container max-w-md mx-auto">
                       <UserRegistration onRegisterSuccess={handleLoginSuccess} />
-                      <p className="redirect-text">
-                        Already have an account? <Link to="/" className="link">Login</Link>
+                      <p className="text-center mt-4 text-sm">
+                        Already have an account?{" "}
+                        <Link to="/" className="text-blue-600 hover:underline">
+                          Login
+                        </Link>
                       </p>
                     </div>
-                  ) : (
-                    <Navigate to="/app" />
-                  )
-                } 
+                  </PublicRoute>
+                }
               />
-              <Route 
-                path="/app/*" 
+
+              {/* Private Routes */}
+              <Route
+                path="/app/*"
                 element={
-                  isAuthenticated ? (
+                  <PrivateRoute>
                     <UserSystemApp onLogout={handleLogout} />
-                  )  : (
-                      <Navigate to="/" />
-                  )
-                } 
+                  </PrivateRoute>
+                }
               />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/create-group" element={<CreateGroup />} />
-              <Route path="/group/:id" element={<GroupDetail />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/create-group"
+                element={
+                  <PrivateRoute>
+                    <CreateGroup />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/group/:id"
+                element={
+                  <PrivateRoute>
+                    <GroupDetail />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* Redirect unknown routes */}
+              <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </main>
+
           <Footer />
         </div>
       </Suspense>

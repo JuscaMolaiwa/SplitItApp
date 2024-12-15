@@ -1,125 +1,129 @@
-import React from 'react';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom"; // Import for routing
 
-const Dashboard = () => {
-  const handleNavigation = (path) => {
-    alert(`Navigate to ${path}`); // Replace with actual navigation logic
-  };
+// Sidebar Component
+const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <div style={styles.container}>
-      {/* Navigation Bar */}
-      <div style={styles.navbar}>
-        <h1 style={styles.logo}>SplitItApp</h1>
-        <div style={styles.navLinks}>
-          <button style={styles.navButton} onClick={() => handleNavigation('home')}>Home</button>
-          <button style={styles.navButton} onClick={() => handleNavigation('create-group')}>Create Group</button>
-          <button style={styles.navButton} onClick={() => handleNavigation('manage-groups')}>Manage Groups</button>
-        </div>
+    <aside
+      className={`fixed inset-y-0 left-0 w-64 bg-gray-900 text-white transform ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0 transition-transform duration-300 ease-in-out z-50`}
+    >
+      <div className="flex flex-col h-full p-5">
+        <h1 className="text-2xl font-bold mb-10">SplitItApp</h1>
+        <nav className="flex flex-col gap-4" aria-label="Sidebar Navigation">
+          <Link
+            to="/dashboard"
+            className={`${
+              isActive("/dashboard") ? "text-blue-400" : "text-gray-300"
+            } hover:text-white`}
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/create-group"
+            className={`${
+              isActive("/create-group") ? "text-blue-400" : "text-gray-300"
+            } hover:text-white`}
+          >
+            Create Group
+          </Link>
+          <Link
+            to="/manage-groups"
+            className={`${
+              isActive("/manage-groups") ? "text-blue-400" : "text-gray-300"
+            } hover:text-white`}
+          >
+            Manage Groups
+          </Link>
+        </nav>
+        <button
+          onClick={toggleSidebar}
+          className="mt-auto bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg lg:hidden"
+          aria-label="Close Sidebar"
+        >
+          Close Sidebar
+        </button>
       </div>
-
-      {/* Main Content */}
-      <h2 style={styles.heading}>Dashboard</h2>
-      <p style={styles.description}>
-        Welcome to the dashboard. You can create and manage your groups here.
-      </p>
-
-      {/* Cards Section */}
-      <div style={styles.cardContainer}>
-        <div style={styles.card} onClick={() => handleNavigation('create-group')}>
-          <h3 style={styles.cardTitle}>Create Group</h3>
-          <p style={styles.cardDescription}>
-            Start a new group and split expenses easily.
-          </p>
-        </div>
-        <div style={styles.card} onClick={() => handleNavigation('manage-groups')}>
-          <h3 style={styles.cardTitle}>Manage Groups</h3>
-          <p style={styles.cardDescription}>
-            View, edit, or delete your existing groups.
-          </p>
-        </div>
-      </div>
-    </div>
+    </aside>
   );
 };
 
-const styles = {
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '20px',
-    textAlign: 'center',
-  },
-  navbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '10px 20px',
-    backgroundColor: '#3b82f6',
-    color: '#fff',
-    borderRadius: '8px',
-    marginBottom: '30px',
-  },
-  logo: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-  },
-  navLinks: {
-    display: 'flex',
-    gap: '10px',
-  },
-  navButton: {
-    backgroundColor: '#2563eb',
-    border: 'none',
-    color: '#fff',
-    padding: '8px 12px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    transition: 'background-color 0.3s ease',
-  },
-  navButtonHover: {
-    backgroundColor: '#1e40af',
-  },
-  heading: {
-    fontSize: '28px',
-    marginBottom: '15px',
-    color: '#333',
-  },
-  description: {
-    fontSize: '16px',
-    marginBottom: '30px',
-    color: '#555',
-  },
-  cardContainer: {
-    display: 'flex',
-    gap: '20px',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-  },
-  card: {
-    flex: '1 1 calc(50% - 40px)',
-    maxWidth: '300px',
-    padding: '15px',
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    textAlign: 'left',
-    cursor: 'pointer',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  },
-  cardTitle: {
-    fontSize: '18px',
-    marginBottom: '10px',
-    color: '#222',
-  },
-  cardDescription: {
-    fontSize: '14px',
-    color: '#666',
-  },
-  cardHover: {
-    transform: 'scale(1.05)',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.15)',
-  },
+// Header Component
+const Header = ({ onMenuClick }) => (
+  <header
+    className="bg-gray-900 text-white p-4 flex justify-between items-center lg:hidden"
+    aria-label="Header Navigation"
+  >
+    <button
+      onClick={onMenuClick}
+      className="text-2xl text-white hover:text-gray-300"
+      aria-label="Open Sidebar"
+    >
+      ☰
+    </button>
+    <h1 className="text-xl font-bold">SplitItApp</h1>
+    <button className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500">
+      Logout
+    </button>
+  </header>
+);
+
+// Card Component
+const Card = ({ title, description }) => (
+  <div className="bg-white rounded-lg shadow hover:shadow-md p-6 transition-shadow duration-300">
+    <h3 className="text-xl font-semibold mb-2">{title}</h3>
+    <p className="text-gray-600">{description}</p>
+  </div>
+);
+
+// Main Dashboard Component
+const Dashboard = () => {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
+  return (
+    <div className="flex h-screen">
+      {/* Sidebar */}
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col bg-gray-100 lg:ml-64">
+        {/* Header for Small Screens */}
+        <Header onMenuClick={toggleSidebar} />
+
+        {/* Page Content */}
+        <main className="flex-1 p-6">
+          <h2 className="text-2xl font-semibold mb-6">Welcome to SplitItApp</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            <Card
+              title="Create Group"
+              description="Start a new group and split expenses easily."
+            />
+            <Card
+              title="Manage Groups"
+              description="View, edit, or delete your existing groups."
+            />
+            <Card
+              title="Recent Activity"
+              description="Check the latest updates on group expenses."
+            />
+            <Card
+              title="Profile"
+              description="Update your profile and account settings."
+            />
+          </div>
+        </main>
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;

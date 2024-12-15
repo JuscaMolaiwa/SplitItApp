@@ -9,6 +9,10 @@ main {
   padding: 20px;
 }
 
+.active {
+  color: #5A67D8; /* Indigo */
+  font-weight: bold;
+}
 
 /* Center the main container */
 .app-container {
