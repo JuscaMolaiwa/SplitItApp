@@ -29,5 +29,5 @@ class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///production.db')  # Default to SQLite for production if not set
-    CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'https://yourdomain.com').split(',')  # Specify production origins
+    CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'https://yourdomain.com').split(',')  # Specify production origin
     
