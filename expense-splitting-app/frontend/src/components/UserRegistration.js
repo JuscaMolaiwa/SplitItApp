@@ -21,7 +21,7 @@ const UserRegistration = ({ onRegisterSuccess }) => {
     const trimmedFullName = fullName.trim();
     const trimmedPassword = password.trim();
     const trimmedProfileImage = profileImage.trim();
-    
+
     // Validate required fields
     const missingFields = []; // Array to hold names of missing fields
 
@@ -201,6 +201,7 @@ const UserRegistration = ({ onRegisterSuccess }) => {
         <input
           id="username"
           type="text"
+          placeholder="Enter your username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -242,6 +243,7 @@ const UserRegistration = ({ onRegisterSuccess }) => {
         <input
           id="full_name"
           type="text"
+          placeholder="Enter your full name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
