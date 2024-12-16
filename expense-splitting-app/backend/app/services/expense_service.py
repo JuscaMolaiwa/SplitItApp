@@ -2,9 +2,10 @@ from enum import Enum
 import logging
 from typing import Any, Dict, List, Union
 from urllib import request
-from ..models import Expense, ExpenseSplit, GroupMember, User
+from ..models import Expense, ExpenseSplit, Group, GroupMember, User
 from .. import db
 import logging
+from sqlalchemy.orm.exc import NoResultFound # type: ignore
 
 class SplitType(Enum):
     EQUAL = "equal"
@@ -19,6 +20,18 @@ CURRENCY_SYMBOLS = {
     }
 
 class ExpenseService:
+
+    @staticmethod
+    def get_participants_user_ids(group_id: int) -> List[Dict[str, Any]]:
+        """Fetch user_ids of participants in a group."""
+        group = Group.query.get(group_id)
+        if not group:
+            raise ValueError("Group not found")
+
+        # Create a list of participants with user_id and name
+        user_ids = [{'user_id': user.id, 'name': user.username} for user in group.members]
+        return user_ids
+
 
     @staticmethod
     def add_expense(
@@ -81,6 +94,9 @@ class ExpenseService:
         if currency.upper() not in valid_currencies:
             raise ValueError("Invalid currency. Must be a valid ISO 4217 code.")
         
+        # Fetch participants from the group
+        participants = ExpenseService.get_participants_user_ids(group_id)
+        
         # Participants validation
         if not participants or not isinstance(participants, list):
             raise ValueError("Invalid participants")
@@ -91,6 +107,13 @@ class ExpenseService:
             
             if 'user_id' not in participant or 'name' not in participant:
                 raise ValueError("Participant must have user_id and name")
+            
+             # Ensure each user_id exists in the users table
+            try:
+                user = User.query.filter_by(id=participant['user_id']).one()
+            except NoResultFound:
+                raise ValueError(f"User with ID {participant['user_id']} not found")
+            
 
         # Check if the user is a member of the group
         is_member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
@@ -184,8 +207,7 @@ class ExpenseService:
         logging.debug(f"Calculated splits: {splits}")
 
         return splits
-
-
+    
     # Function to calculate equal split
     @staticmethod
     def _calculate_equal_split(amount: float, participants: List[Dict]) -> List[Dict]:

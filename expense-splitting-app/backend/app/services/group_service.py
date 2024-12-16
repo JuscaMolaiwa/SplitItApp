@@ -99,11 +99,21 @@ class GroupService:
         group = Group.query.filter_by(unique_code=unique_code).first()
         if not group:
             raise ValueError("Group not found.")
+        
+        # Check if the user is already a member of the group
+        is_member = GroupMember.query.filter_by(user_id=user_id, group_id=group.id).first()
+        if is_member:
+            raise ValueError("User is already a member of the group.")
 
         GroupService.add_user_to_group(user_id, group.id)
 
     @staticmethod
     def get_group_members(group_id):
+        # Check if the group exists
+        group = Group.query.filter_by(id=group_id).first()
+        if not group:
+            raise ValueError("Group not found.")
+    
         # Query to get members of the group
         members = (
             db.session.query(User)
