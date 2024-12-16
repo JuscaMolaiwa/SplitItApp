@@ -66,7 +66,7 @@ CREATE DATABASE expense_splits;
   - Replace <username> and <password> in the DATABASE_URI field of your .env file with your MySQL credentials. Example:
   
   ```bash
-  DATABASE_URI=mysql+pymysql://`<username>`:`<password>`@localhost/expense_split
+  DATABASE_URI=mysql+pymysql://Jusca:Root123@localhost/expense_split
   ```
 
 4. ### Initialize and Migrate the Database
