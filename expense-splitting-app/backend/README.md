@@ -61,10 +61,12 @@ mysql -u root -p
 CREATE DATABASE expense_splits;
 ```
 
-- Update Your .env File
+- Update the .env file to include the database configuration:
+
   - Replace <username> and <password> in the DATABASE_URI field of your .env file with your MySQL credentials. Example:
+  
   ```bash
-  DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_split
+  DATABASE_URI=mysql+pymysql://`<username>`:`<password>`@localhost/expense_split
   ```
 
 4. ### Initialize and Migrate the Database
