@@ -37,13 +37,52 @@ pip install -r requirements.txt
 
 3. ### Set Up the Database
 
-- Install and configure MySQL on your system.
+- Install and configure MySQL
+  - Install MySQL on Mac using Homebrew:
+    ```bash 
+    brew install mysql
+    ```
+  - To set the root password:
+    ```bash
+    mysql_secure_installation
+    ```
+
+  - Install MySQL on Windows:
+    - [Downloads](https://dev.mysql.com/downloads/) and follow the installation steps for your operating system.
+    - During configuration, set a root password.
+
+- Start the MySQL server on your system
+```bash
+mysql -u root -p
+```
+
 - Create a new database for the project:
 ```sql
 CREATE DATABASE expense_splits;
 ```
 
-4. ### Update/Create the .env file at root of `expense-splitting-app` folder with your database credentials:
+- Update Your .env File
+  - Replace <username> and <password> in the DATABASE_URI field of your .env file with your MySQL credentials. Example:
+  ```bash
+  DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_split
+  ```
+
+4. ### Initialize and Migrate the Database
+
+- Initialize the database: 
+```bash
+flask db init
+```
+- Migrate the database:
+```bash
+flask db migrate -m “Create tables"
+```
+- Apply the migration database:
+```bash
+flask db upgrade
+```
+
+5. ### Update/Create the .env file at root of `expense-splitting-app` folder with your database credentials:
 
 ```makefile
 DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/expense_splitting
@@ -57,16 +96,15 @@ UPLOAD_FOLDER=uploads
 ALLOWED_EXTENSIONS=png,jpg,jpeg,gif
 ```
 
-- To generate the SECRET_KEY and replace the `your-secret-key`, you can use the following command:
+- Generate a secure SECRET_KEY: Run the following command and copy the output into the SECRET_KEY field of your .env file:
 
 ```bash
 python3 -c "import secrets; print(secrets.token_hex(32))"
 ```
-- Replace `<username>`, `<password>` with your actual database credentials.
 
 - Use the JWT_SECRET_KEY from .env as is for authentication during unit testing and development.
 
-5. ### Unit Testing
+6. ### Unit Testing
 
 - Run the tests:
     - Ensure TEST_DATABASE_URI in .env is set to:
@@ -83,7 +121,7 @@ TEST_DATABASE_URI=sqlite:///:memory:
 
   - Please refer to the [Unittest README](../backend/unittests/README.md) for setup and more info.
 
-6. ### Run the Application
+7. ### Run the Application
 
 - Start the backend application:
 
@@ -99,7 +137,7 @@ http://127.0.0.1:5000/
 
 ## API Endpoints
 
-# User Management
+## User Management
 
 ### User Login
 - **Endpoint**: `POST /api/login`
@@ -159,7 +197,7 @@ http://127.0.0.1:5000/
   - `500 Internal Server Error`: Unexpected error.
 
 
-# Group Management
+## Group Management
 
 ### Create a New Group
 - **Endpoint**: `POST /api/groups`
@@ -187,7 +225,7 @@ http://127.0.0.1:5000/
   - `200 OK`: List of group members.
   - `500 Internal Server Error`: Unexpected error.
 
-# Expense Management
+## Expense Management
 
 ### Create a New Expense
 - **Endpoint**: `POST /api/expenses`
@@ -222,4 +260,3 @@ http://127.0.0.1:5000/
 
 ## License
 - This project is licensed under the MIT License. See the [LICENSE](../backend/LICENSE) file for details.
-
