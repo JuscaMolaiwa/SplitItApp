@@ -1,5 +1,26 @@
 # Expense Splitting App - Backend Setup
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Prerequisites](#prerequisites)
+3. [Setup Instructions](#setup-instructions)
+  3.1 [Navigate to the Backend Directory](#navigate-to-the-backend-directory)
+  3.2 [Set Up the Virtual Environment](#set-up-the-virtual-environment)
+  3.3 [Set Up the Database](#set-up-the-database)
+  3.4 [Initialize and Migrate the Database](#initialize-and-migrate-the-database)
+  3.5 [Update/Create the .env File](#updatecreate-the-env-file-at-root-of-expense-splitting-app-folder-with-your-database-credentials)
+4. [Unit Testing](#unit-testing)
+5. [Run the Application](#run-the-application)
+6. [API Endpoints](#api-endpoints)
+  6.1 [User Management](#user-management)
+  6.2 [Group Management](#group-management)
+  6.3 [Expense Management](#expense-management)
+7. [Contributing](#contributing)
+8. [Troubleshooting](#troubleshooting)
+9. [API Documentation](#api-documentation)
+10. [License](#license)
+
 ## Overview
 
 This guide explains the steps to set up the backend of the Expense Splitting App on your local environment. Follow these instructions to install dependencies, configure the database, and run the application.
