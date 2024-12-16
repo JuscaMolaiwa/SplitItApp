@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify # type: ignore
 from ..services.expense_service import ExpenseService  # Import the ExpenseService
 from ..utils.auth_utils import get_current_user_id, login_required
 from flask_jwt_extended import jwt_required # type: ignore
-from ..models import User
+from ..models import Group, User
 
 bp = Blueprint('expenses', __name__)
 
@@ -108,6 +108,11 @@ def get_expenses(user_id):
 
     if not group_id:
         return jsonify({'error': 'Group ID is required'}), 400
+    
+    # Check if the group exists
+    group = Group.query.get(group_id)
+    if not group:
+        return jsonify({'error': 'Group not found'}), 404
 
     try:
         # Use the ExpenseService to get expenses with pagination
