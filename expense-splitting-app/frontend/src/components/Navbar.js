@@ -1,20 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state for mobile
   const navigate = useNavigate(); // For navigation after logout
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // User authentication state
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    if (authToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
 
   // Logout handler
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
     sessionStorage.removeItem('auth_token');
+    setIsLoggedIn(false); // Update state after logout
     navigate('/login'); // Redirect to login after logout
   };
 
+  // Render navbar only if the user is logged in
+  if (!isLoggedIn) {
+    return null; // Return nothing when the user is not logged in
+  }
+
   return (
     <nav className="bg-indigo-600 text-white shadow-lg fixed w-full top-0 left-0 z-50">
+      
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
         {/* Branding */}
         <div className="text-xl font-bold">
