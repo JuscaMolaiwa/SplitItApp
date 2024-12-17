@@ -33,7 +33,7 @@ function App() {
         <div className="app-container bg-gray-100 min-h-screen flex flex-col">
           <header>
             <h1 className="text-3xl font-bold text-center py-4">SplitItApp</h1>
-            <Navbar />
+            <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
           </header>
 
           <main className="flex-1 container mx-auto p-4">
