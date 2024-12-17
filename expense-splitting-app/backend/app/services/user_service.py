@@ -21,7 +21,7 @@ class UserService:
         
         # Check if the email is already registered
         if User.query.filter_by(email=email).first():
-            raise ValueError("Email already registered")
+            raise ValueError("Email is already registered")
         
     #Username validation method
     def is_valid_username(username):
@@ -30,7 +30,7 @@ class UserService:
         if not re.match(r'^[a-zA-Z0-9_-]+$', username):
             raise ValueError("Username can only contain letters, numbers, hyphens, and underscores.")
         if User.query.filter_by(username=username).first():
-            raise ValueError("Username already taken")
+            raise ValueError("Username is already taken")
 
     #Password validation  
     def is_valid_password(password):
