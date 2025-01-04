@@ -1,7 +1,14 @@
 import React, { useState, Suspense, lazy } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Link,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CreateExpenses from "./components/CreateExpenses";
 
 // Lazy load pages and components for better performance
 const UserLogin = lazy(() => import("./components/UserLogin"));
@@ -29,7 +36,13 @@ function App() {
 
   return (
     <Router>
-      <Suspense fallback={<div className="h-screen flex items-center justify-center">Loading...</div>}>
+      <Suspense
+        fallback={
+          <div className="h-screen flex items-center justify-center">
+            Loading...
+          </div>
+        }
+      >
         <div className="app-container bg-gray-100 min-h-screen flex flex-col">
           <header>
             <h1 className="text-3xl font-bold text-center py-4">SplitItApp</h1>
@@ -47,7 +60,10 @@ function App() {
                       <UserLogin onLoginSuccess={handleLoginSuccess} />
                       <p className="text-center mt-4 text-sm">
                         Don't have an account?{" "}
-                        <Link to="/register" className="text-blue-600 hover:underline">
+                        <Link
+                          to="/register"
+                          className="text-blue-600 hover:underline"
+                        >
                           Register
                         </Link>
                       </p>
@@ -60,7 +76,9 @@ function App() {
                 element={
                   <PublicRoute>
                     <div className="form-container max-w-md mx-auto">
-                      <UserRegistration onRegisterSuccess={handleLoginSuccess} />
+                      <UserRegistration
+                        onRegisterSuccess={handleLoginSuccess}
+                      />
                       <p className="text-center mt-4 text-sm">
                         Already have an account?{" "}
                         <Link to="/" className="text-blue-600 hover:underline">
@@ -102,6 +120,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <GroupDetail />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/create-expense"
+                element={
+                  <PrivateRoute>
+                    <CreateExpenses />
                   </PrivateRoute>
                 }
               />

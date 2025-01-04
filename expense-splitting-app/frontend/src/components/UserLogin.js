@@ -77,7 +77,7 @@ const UserLogin = ({ onLoginSuccess }) => {
 
   return (
     <div className="container">
-      <h2 className="header">User Login</h2>
+      <h2 className="header">Enter your email and password</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
