@@ -1,42 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ProfileManagement = () => {
-  const [full_name, setName] = useState('');
-  const [bio, setBio] = useState('');
-  const [profile_image_url, setProfileImage] = useState(''); // To store the image URL or image data
+  const [full_name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [profile_image_url, setProfileImage] = useState(""); // To store the image URL or image data
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null); // To show success message
-  const [previewImage, setPreviewImage] = useState(''); // For image preview
+  const [previewImage, setPreviewImage] = useState(""); // For image preview
 
   // Fetch existing profile data when the component mounts
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+        const token =
+          localStorage.getItem("auth_token") ||
+          sessionStorage.getItem("auth_token");
 
         if (!token) {
-          setError('Authentication token is missing!');
+          setError("Authentication token is missing!");
           return;
         }
 
-        const response = await fetch('http://127.0.0.1:5000/api/profile', {
-          method: 'GET',
+        const response = await fetch("http://127.0.0.1:5000/api/profile", {
+          method: "GET",
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch profile data');
+          throw new Error("Failed to fetch profile data");
         }
 
         const data = await response.json();
-        setName(data.full_name || ''); 
-        setBio(data.bio || ''); 
-        setProfileImage(data.profile_image_url || ''); 
-    
+        setName(data.full_name || "");
+        setBio(data.bio || "");
+        setProfileImage(data.profile_image_url || "");
       } catch (error) {
         setError(error.message);
       }
@@ -49,7 +50,7 @@ const ProfileManagement = () => {
   const handleProfileUpdate = async () => {
     // Validation
     if (!full_name || !bio) {
-      setError('Full Name and Bio are required!');
+      setError("Full Name and Bio are required!");
       return;
     }
 
@@ -58,40 +59,41 @@ const ProfileManagement = () => {
       setError(null); // Reset error on each update attempt
       setSuccessMessage(null); // Reset success message
 
-      const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+      const token =
+        localStorage.getItem("auth_token") ||
+        sessionStorage.getItem("auth_token");
       if (!token) {
-        setError('Authentication token is missing!');
+        setError("Authentication token is missing!");
         return;
       }
 
       const formData = new FormData();
-      formData.append('full_name', full_name);
-      formData.append('bio', bio);
+      formData.append("full_name", full_name);
+      formData.append("bio", bio);
 
       // If there's a profile image, append it to the form data
       if (profile_image_url) {
-        formData.append('profile_image', profile_image_url);
+        formData.append("profile_image", profile_image_url);
       }
 
-      const response = await fetch('http://127.0.0.1:5000/api/profile', {
-        method: 'PUT',
+      const response = await fetch("http://127.0.0.1:5000/api/profile", {
+        method: "PUT",
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Profile update failed!');
+        throw new Error("Profile update failed!");
       }
 
       const data = await response.json();
-      setSuccessMessage('Profile updated successfully!');
+      setSuccessMessage("Profile updated successfully!");
       setName(data.full_name); // Optionally update the fields with the returned data
-      setBio(data.bio); 
-      setProfileImage(data.profile_image_url); 
-      setPreviewImage(''); // Reset image preview after successful update
-
+      setBio(data.bio);
+      setProfileImage(data.profile_image_url);
+      setPreviewImage(""); // Reset image preview after successful update
     } catch (error) {
       setError(error.message);
     } finally {
@@ -121,7 +123,9 @@ const ProfileManagement = () => {
 
       {/* Name Input */}
       <div>
-        <label htmlFor="full_name" className="block font-medium">Full Name</label>
+        <label htmlFor="full_name" className="block font-medium">
+          Full Name
+        </label>
         <input
           id="full_name"
           type="text"
@@ -130,10 +134,12 @@ const ProfileManagement = () => {
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
       </div>
-      
+
       {/* Bio Input */}
       <div>
-        <label htmlFor="bio" className="block font-medium">Bio</label>
+        <label htmlFor="bio" className="block font-medium">
+          Bio
+        </label>
         <textarea
           id="bio"
           value={bio}
@@ -144,7 +150,9 @@ const ProfileManagement = () => {
 
       {/* Profile Image Input */}
       <div>
-        <label htmlFor="profile_image_url" className="block font-medium">Profile Image</label>
+        <label htmlFor="profile_image_url" className="block font-medium">
+          Profile Image
+        </label>
         <input
           id="profile_image_url"
           type="file"
@@ -153,7 +161,11 @@ const ProfileManagement = () => {
         />
         {previewImage && (
           <div className="mt-2">
-            <img src={previewImage} alt="Profile Preview" className="w-32 h-32 object-cover rounded-md" />
+            <img
+              src={previewImage}
+              alt="Profile Preview"
+              className="w-32 h-32 object-cover rounded-md"
+            />
           </div>
         )}
       </div>
@@ -167,7 +179,7 @@ const ProfileManagement = () => {
         className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md"
         disabled={loading} // Disable button during API call
       >
-        {loading ? 'Updating...' : 'Update Profile'}
+        {loading ? "Updating..." : "Update Profile"}
       </button>
     </div>
   );
