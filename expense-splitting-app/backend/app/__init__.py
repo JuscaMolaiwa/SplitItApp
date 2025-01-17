@@ -7,6 +7,8 @@ from .config import DevelopmentConfig  # Change this to the appropriate config c
 from flask_jwt_extended import JWTManager # type: ignore
 from .utils import auth_utils
 import logging
+import stripe
+import paypalrestsdk
 
 # Set the logging level to DEBUG to capture debug logs
 logging.basicConfig(level=logging.DEBUG)
@@ -49,7 +51,7 @@ def create_app(config_class=DevelopmentConfig):
     migrate.init_app(app, db)
 
     # Import and register blueprints or routes
-    from .routes import auth, logout, groups, profile, expenses, user, admin
+    from .routes import auth, logout, groups, profile, expenses, user, admin, payments
     app.register_blueprint(auth.bp)
     app.register_blueprint(logout.bp)
     app.register_blueprint(groups.bp)
@@ -57,6 +59,7 @@ def create_app(config_class=DevelopmentConfig):
     app.register_blueprint(expenses.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(admin.bp)
+    app.register_blueprint(payments.bp)
 
 
     @app.errorhandler(Exception)
@@ -67,5 +70,15 @@ def create_app(config_class=DevelopmentConfig):
             "message": "An unexpected error occurred."
         }
         return jsonify(response), 500
+    
+    # Initialize Stripe
+    stripe.api_key = app.config['STRIPE_API_KEY']
+
+    # Initialize PayPal
+    paypalrestsdk.configure({
+        "mode": "sandbox",  # or "live"
+        "client_id": app.config['PAYPAL_CLIENT_ID'],
+        "client_secret": app.config['PAYPAL_CLIENT_SECRET']
+    })
     
     return app
