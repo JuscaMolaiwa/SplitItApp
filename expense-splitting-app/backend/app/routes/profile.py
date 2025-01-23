@@ -41,16 +41,15 @@ def update_profile(user_id):
     data = request.get_json() if request.is_json else request.form
 
     full_name = data.get('full_name')
-    bio = data.get('bio')
 
-    if not full_name or not bio:
-        return jsonify({'message': 'Full Name and Bio are required'}), 400
+    if not full_name:
+        return jsonify({'message': 'Full Name is required'}), 400
 
     # Check for profile image
     profile_image = request.files.get('profile_image')
 
     try:
-        user = ProfileService.update_user_profile(current_user_id, full_name, bio, profile_image)
+        user = ProfileService.update_user_profile(current_user_id, full_name, profile_image)
         return jsonify({
             'message': 'Profile updated successfully',
             'profile_image_url': user.profile_image

@@ -14,18 +14,16 @@ class ProfileService:
             'username': user.username,
             'email': user.email,
             'full_name': user.full_name,
-            'profile_image': user.profile_image,
-            'bio': user.bio
+            'profile_image': user.profile_image
         }
 
     @staticmethod
-    def update_user_profile(current_user_id, full_name, bio, profile_image):
+    def update_user_profile(current_user_id, full_name, profile_image):
         user = User.query.get_or_404(current_user_id)
 
         # Update user profile fields 
         # these are the fields that are required to be filled
         user.full_name = full_name
-        user.bio = bio
 
         # Handle profile image upload
         image_url = None
