@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 const ProfileManagement = () => {
   const [full_name, setName] = useState("");
-  const [bio, setBio] = useState("");
   const [profile_image_url, setProfileImage] = useState(""); // To store the image URL or image data
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -36,7 +35,7 @@ const ProfileManagement = () => {
 
         const data = await response.json();
         setName(data.full_name || "");
-        setBio(data.bio || "");
+        
         setProfileImage(data.profile_image_url || "");
       } catch (error) {
         setError(error.message);
@@ -49,8 +48,8 @@ const ProfileManagement = () => {
   // Update the user's profile
   const handleProfileUpdate = async () => {
     // Validation
-    if (!full_name || !bio) {
-      setError("Full Name and Bio are required!");
+    if (!full_name) {
+      setError("Full Name is required!");
       return;
     }
 
@@ -69,7 +68,6 @@ const ProfileManagement = () => {
 
       const formData = new FormData();
       formData.append("full_name", full_name);
-      formData.append("bio", bio);
 
       // If there's a profile image, append it to the form data
       if (profile_image_url) {
@@ -91,7 +89,6 @@ const ProfileManagement = () => {
       const data = await response.json();
       setSuccessMessage("Profile updated successfully!");
       setName(data.full_name); // Optionally update the fields with the returned data
-      setBio(data.bio);
       setProfileImage(data.profile_image_url);
       setPreviewImage(""); // Reset image preview after successful update
     } catch (error) {
@@ -131,19 +128,6 @@ const ProfileManagement = () => {
           type="text"
           value={full_name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-        />
-      </div>
-
-      {/* Bio Input */}
-      <div>
-        <label htmlFor="bio" className="block font-medium">
-          Bio
-        </label>
-        <textarea
-          id="bio"
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
       </div>
