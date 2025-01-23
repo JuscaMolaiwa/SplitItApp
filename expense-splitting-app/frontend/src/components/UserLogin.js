@@ -55,6 +55,7 @@ const UserLogin = ({ onLoginSuccess }) => {
         }
 
         onLoginSuccess();
+        navigate("/dashboard");
 
         alert("Login successful");
         navigate("/app"); // Redirect to the app (Profile page)

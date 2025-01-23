@@ -21,12 +21,15 @@ const GroupDetail = lazy(() => import("./pages/GroupDetail"));
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLoginSuccess = () => setIsAuthenticated(true);
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
   const handleLogout = () => setIsAuthenticated(false);
 
   // PublicRoute for guests
   const PublicRoute = ({ children }) => {
-    return !isAuthenticated ? children : <Navigate to="/app" />;
+    return !isAuthenticated ? children : <Navigate to="/dashboard" />;
   };
 
   // PrivateRoute for authenticated users
@@ -92,18 +95,18 @@ function App() {
 
               {/* Private Routes */}
               <Route
-                path="/app/*"
-                element={
-                  <PrivateRoute>
-                    <UserSystemApp onLogout={handleLogout} />
-                  </PrivateRoute>
-                }
-              />
-              <Route
                 path="/dashboard"
                 element={
                   <PrivateRoute>
                     <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/app/*"
+                element={
+                  <PrivateRoute>
+                    <UserSystemApp onLogout={handleLogout} />
                   </PrivateRoute>
                 }
               />

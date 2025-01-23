@@ -1,0 +1,49 @@
+.group-members-container {
+    width: 25%;
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-left: 1px solid #e5e7eb;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.group-info {
+    background-color: indigo;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.group-info h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.group-info p {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+}
+
+.members-list {
+    list-style: none;
+    padding: 0;
+}
+
+.member-item {
+    background-color: white;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.error {
+    color: red;
+    font-size: 0.875rem;
+}

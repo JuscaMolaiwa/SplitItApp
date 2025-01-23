@@ -1,129 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // Mobile menu state
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state for mobile
-  const navigate = useNavigate(); // For navigation after logout
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // User authentication state
-
-  useEffect(() => {
-    const authToken = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
-    if (authToken) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
-
-
-  // Logout handler
-  const handleLogout = () => {
-    localStorage.removeItem('auth_token');
-    sessionStorage.removeItem('auth_token');
-    setIsLoggedIn(false); // Update state after logout
-    navigate('/login'); // Redirect to login after logout
-  };
-
-  // Render navbar only if the user is logged in
-  if (!isLoggedIn) {
-    return null; // Return nothing when the user is not logged in
-  }
-
+function Navbar({ isAuthenticated, onLogout }) {
   return (
-    <nav className="bg-indigo-600 text-white shadow-lg fixed w-full top-0 left-0 z-50">
-      
-      <div className="container mx-auto flex justify-between items-center px-6 py-4">
-        {/* Branding */}
-        <div className="text-xl font-bold">
-          <NavLink to="/dashboard" className="hover:text-indigo-200 transition-all duration-200">
-            SplitItApp
-          </NavLink>
-        </div>
-
-        {/* Hamburger Menu Toggle (Mobile) */}
-        <button
-          className="text-white lg:hidden focus:outline-none"
-          onClick={() => {
-            setIsOpen(!isOpen);
-            setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility for mobile
-          }}
+    <nav
+      style={{
+        backgroundColor: "#5A4FCF", // Indigo purple theme
+        color: "white",
+        padding: "1rem",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <div>
+        <Link
+          to="/"
+          style={{ color: "white", textDecoration: "none", fontWeight: "bold" }}
         >
-          {isOpen ? (
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12" // Close (✖) icon
-              />
-            </svg>
-          ) : (
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16m-7 6h7" // Open (☰) icon
-              />
-            </svg>
-          )}
-        </button>
-
-        {/* Links */}
-        <ul
-          className={`lg:flex lg:space-x-8 ${
-            isOpen ? 'block' : 'hidden'
-          } lg:block bg-indigo-600 lg:bg-transparent absolute lg:static top-16 left-0 w-full lg:w-auto text-center lg:text-left transition-all duration-300`}
-        >
-          <li className="py-2 lg:py-0">
-            <NavLink
+          SplitItApp
+        </Link>
+      </div>
+      <div>
+        {isAuthenticated ? (
+          <>
+            <Link
               to="/dashboard"
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-indigo-200 font-semibold'
-                  : 'hover:text-indigo-200 transition-all duration-200'
-              }
+              style={{
+                color: "white",
+                marginRight: "1rem",
+                textDecoration: "none",
+              }}
             >
               Dashboard
-            </NavLink>
-          </li>
-          <li className="py-2 lg:py-0">
-            <NavLink
+            </Link>
+            <Link
               to="/create-group"
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-indigo-200 font-semibold'
-                  : 'hover:text-indigo-200 transition-all duration-200'
-              }
+              style={{
+                color: "white",
+                marginRight: "1rem",
+                textDecoration: "none",
+              }}
             >
               Create Group
-            </NavLink>
-          </li>
-          <li className="py-2 lg:py-0">
+            </Link>
             <button
-              onClick={handleLogout}
-              className="hover:text-indigo-200 transition-all duration-200"
+              onClick={onLogout}
+              style={{
+                backgroundColor: "#4B3B9D", // Darker indigo for button
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                padding: "0.5rem 1rem",
+                cursor: "pointer",
+              }}
             >
               Logout
             </button>
-          </li>
-        </ul>
+          </>
+        ) : (
+          <>
+            <Link
+              to="/"
+              style={{
+                color: "white",
+                marginRight: "1rem",
+                textDecoration: "none",
+              }}
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              style={{
+                color: "white",
+                textDecoration: "none",
+                border: "1px solid white",
+                borderRadius: "5px",
+                padding: "0.5rem 1rem",
+              }}
+            >
+              Register
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom"; // Import for routing
+import { Link, useLocation } from "react-router-dom";
 
 // Sidebar Component
 const Sidebar = ({ isOpen, toggleSidebar }) => {
@@ -55,7 +55,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 // Header Component
 const Header = ({ onMenuClick }) => (
   <header
-    className="bg-gray-900 text-white p-4 flex justify-between items-center lg:hidden"
+    className="bg-gray-900 text-white p-4 flex justify-between items-center lg:hidden fixed top-0 left-0 right-0 z-40"
     aria-label="Header Navigation"
   >
     <button
@@ -66,18 +66,17 @@ const Header = ({ onMenuClick }) => (
       ☰
     </button>
     <h1 className="text-xl font-bold">SplitItApp</h1>
-    <button className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500">
-      Logout
-    </button>
   </header>
 );
 
 // Card Component
-const Card = ({ title, description }) => (
-  <div className="bg-white rounded-lg shadow hover:shadow-md p-6 transition-shadow duration-300">
-    <h3 className="text-xl font-semibold mb-2">{title}</h3>
-    <p className="text-gray-600">{description}</p>
-  </div>
+const Card = ({ title, description, link, className }) => (
+  <Link to={link} className={`block ${className}`}>
+    <div className="bg-white h-full rounded-lg shadow-lg hover:shadow-xl p-8 transition-shadow duration-300 hover:bg-gray-50">
+      <h3 className="text-2xl font-semibold mb-4 text-indigo-600">{title}</h3>
+      <p className="text-gray-600 text-lg">{description}</p>
+    </div>
+  </Link>
 );
 
 // Main Dashboard Component
@@ -89,35 +88,41 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="h-screen w-screen flex">
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col bg-gray-100 lg:ml-64">
+      <div className="flex-1 flex flex-col">
         {/* Header for Small Screens */}
         <Header onMenuClick={toggleSidebar} />
 
         {/* Page Content */}
-        <main className="flex-1 p-6">
-          <h2 className="text-2xl font-semibold mb-6">Welcome to SplitItApp</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <main className="flex-1 overflow-y-auto p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full place-content-center">
             <Card
               title="Create Group"
               description="Start a new group and split expenses easily."
+              link="/create-group"
+              className="w-full max-w-md"
             />
             <Card
               title="Manage Groups"
               description="View, edit, or delete your existing groups."
+              link="/manage-groups"
+              className="w-full max-w-md"
             />
             <Card
               title="Recent Activity"
               description="Check the latest updates on group expenses."
+              link="/recent-activity"
+              className="w-full max-w-md"
             />
             <Card
               title="Profile"
               description="Update your profile and account settings."
+              link="/profile"
+              className="w-full max-w-md"
             />
           </div>
         </main>

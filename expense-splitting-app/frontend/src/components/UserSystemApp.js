@@ -1,97 +1,81 @@
 import React, { useState } from "react";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
-import GroupCreation from "./GroupCreation";
-import ProfileManagement from "./ProfileManagement";
-import CreateExpense from "./CreateExpenses";
-import GroupMembers from "./GroupMembers";
-import ExpenseManager from "./ExpenseManager";
+import { Routes, Route, Navigate } from "react-router-dom";
+import GroupList from "./GroupList"; // Displays user's groups
+import GroupDetail from "../pages/GroupDetail"; // Group-specific details and expenses
+import CreateExpenses from "./CreateExpenses"; // Form for adding new expenses
+import GroupMembers from "./GroupMembers"; // Displays members of a group
 
 const UserSystemApp = ({ onLogout }) => {
-  const [activeGroupId, setActiveGroupId] = useState(null); // State for the active group
-  const [showExpenseManager, setShowExpenseManager] = useState(false); // State to control ExpenseManager visibility
-  const navigate = useNavigate(); // To navigate after logout
-  const expenseRef = React.useRef(); // Reference to access `fetchUserGroups` in CreateExpenses
+  const [isSidebarOpen, setSidebarOpen] = useState(true); // Sidebar state
 
-  // Handle logout
-  const handleLogout = () => {
-    localStorage.removeItem("auth_token");
-    sessionStorage.removeItem("auth_token");
-    onLogout();
-    navigate("/"); // Redirect to the login page after logging out
-  };
-
-  // Callback to refresh the group list in CreateExpenses
-  const refreshGroups = () => {
-    if (expenseRef.current && expenseRef.current.fetchUserGroups) {
-      expenseRef.current.fetchUserGroups();
-    }
-  };
-
-  const handleGroupCreation = (groupId) => {
-    setActiveGroupId(groupId); // Set the active group when created
-    refreshGroups(); // Refresh the group list
-  };
-
-  const handleExpenseCreated = () => {
-    console.log("Expense has been created!");
-  };
-
-  const handleExpenseManagerClose = () => {
-    setShowExpenseManager(false);
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
-      {/* Navbar */}
-      <nav className="bg-indigo-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
-        <h1 className="text-2xl font-bold">User System</h1>
-        <div className="flex space-x-6 text-sm">
-          <Link to="profile" className="hover:underline">
-            Profile
-          </Link>
-          <Link to="groups" className="hover:underline">
-            Groups
-          </Link>
-          <Link to="expenses" className="hover:underline">
-            Expenses
-          </Link>
+    <div className="flex h-screen">
+      {/* Sidebar */}
+      <aside
+        className={`bg-indigo-700 text-white p-4 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out w-64 fixed md:relative z-50 h-full`}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg font-bold">My Groups</h2>
           <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md"
+            onClick={toggleSidebar}
+            className="text-white text-2xl md:hidden"
+            aria-label="Close Sidebar"
           >
-            Logout
+            ×
           </button>
         </div>
-      </nav>
-      <div className="flex-grow flex flex-col items-center px-4 py-6">
-        <div className="max-w-5xl w-full bg-white rounded-lg shadow-lg p-8">
+        <GroupList />
+        <button
+          onClick={onLogout}
+          className="mt-6 w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </aside>
+
+      {/* Main Content */}
+      <div
+        className={`flex-1 bg-gray-100 p-6 ml-64 ${
+          isSidebarOpen ? "md:ml-64" : "ml-0"
+        } transition-all duration-300`}
+      >
+        {/* Header for Mobile Screens */}
+        <header className="md:hidden bg-indigo-700 text-white p-4 flex justify-between items-center">
+          <button
+            onClick={toggleSidebar}
+            className="text-2xl"
+            aria-label="Open Sidebar"
+          >
+            ☰
+          </button>
+          <h1 className="text-lg font-bold">SplitItApp</h1>
+        </header>
+
+        {/* Main Content Routes */}
+        <main className="overflow-y-auto">
           <Routes>
-            <Route path="profile" element={<ProfileManagement />} />
-            <Route
-              path="groups"
-              element={<GroupCreation onGroupCreation={handleGroupCreation} />}
-            />
-            <Route
-              path="expenses"
-              element={
-                <>
-                  <CreateExpense
-                    groupId={activeGroupId}
-                    onExpenseCreated={handleExpenseCreated}
-                    ref={expenseRef}
-                  />
-                  {showExpenseManager && (
-                    <ExpenseManager
-                      groupId={activeGroupId}
-                      onClose={handleExpenseManagerClose}
-                    />
-                  )}
-                </>
-              }
-            />
-            <Route path="/groups/:groupId/members" element={<GroupMembers />} />
+            {/* Default Route: Redirect to Dashboard */}
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+
+            {/* Group Detail: Expenses and Members */}
+            <Route path="group/:id" element={<GroupDetail />} />
+
+            {/* Create Expense */}
+            <Route path="create-expense" element={<CreateExpenses />} />
+
+            {/* Group Members */}
+            <Route path="group/:id/members" element={<GroupMembers />} />
+
+            {/* Default Route: Redirect to Group List */}
+            <Route path="*" element={<Navigate to="/app/group-list" />} />
           </Routes>
-        </div>
+        </main>
       </div>
     </div>
   );
