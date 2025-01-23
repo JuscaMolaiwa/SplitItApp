@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import "./Dashboard.css";
 
 // Sidebar Component
 const Sidebar = ({ isOpen, toggleSidebar }) => {
@@ -69,10 +70,18 @@ const Header = ({ onMenuClick }) => (
   </header>
 );
 
-// Card Component
-const Card = ({ title, description, link, className }) => (
-  <Link to={link} className={`block ${className}`}>
-    <div className="bg-white h-full rounded-lg shadow-lg hover:shadow-xl p-8 transition-shadow duration-300 hover:bg-gray-50">
+// Card Component with Animation
+const Card = ({ title, description, link, className, index }) => (
+  <Link
+    to={link}
+    className={`block ${className} animate-slide-in card-hover-effect`}
+    style={{
+      animationDelay: `${index * 200}ms`,
+      opacity: 0,
+      animation: "slide-in 0.6s ease forwards",
+    }}
+  >
+    <div className="bg-white h-full rounded-lg shadow-lg hover:shadow-xl p-8 transition-all duration-300 hover:bg-gray-50 transform hover:scale-105">
       <h3 className="text-2xl font-semibold mb-4 text-indigo-600">{title}</h3>
       <p className="text-gray-600 text-lg">{description}</p>
     </div>
@@ -82,49 +91,63 @@ const Card = ({ title, description, link, className }) => (
 // Main Dashboard Component
 const Dashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
+  const cards = [
+    {
+      title: "Create Group",
+      description: "Start a new group and split expenses easily.",
+      link: "/create-group",
+    },
+    {
+      title: "Manage Groups",
+      description: "View, edit, or delete your existing groups.",
+      link: "/manage-groups",
+    },
+    {
+      title: "Recent Activity",
+      description: "Check the latest updates on group expenses.",
+      link: "/recent-activity",
+    },
+    {
+      title: "Profile",
+      description: "Update your profile and account settings.",
+      link: "/profile",
+    },
+  ];
+
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Header for Small Screens */}
         <Header onMenuClick={toggleSidebar} />
 
-        {/* Page Content */}
         <main className="flex-1 p-8">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
-              <Card
-                title="Create Group"
-                description="Start a new group and split expenses easily."
-                link="/create-group"
-                className="h-full"
-              />
-              <Card
-                title="Manage Groups"
-                description="View, edit, or delete your existing groups."
-                link="/manage-groups"
-                className="h-full"
-              />
-              <Card
-                title="Recent Activity"
-                description="Check the latest updates on group expenses."
-                link="/recent-activity"
-                className="h-full"
-              />
-              <Card
-                title="Profile"
-                description="Update your profile and account settings."
-                link="/profile"
-                className="h-full"
-              />
+            <div
+              className={`grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr ${
+                isLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {cards.map((card, index) => (
+                <Card
+                  key={card.title}
+                  title={card.title}
+                  description={card.description}
+                  link={card.link}
+                  className="h-full card-hover-effect"
+                  index={index}
+                />
+              ))}
             </div>
           </div>
         </main>
