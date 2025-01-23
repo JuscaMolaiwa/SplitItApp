@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import GroupMembers from "../components/GroupMembers";
 
 const GroupDetail = () => {
   const { id: groupId } = useParams(); // Extract groupId from URL
+  const navigate = useNavigate(); // Move useNavigate to component level
   const [group, setGroup] = useState(null);
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Add button to UI and use navigate properly
+  const handleAddExpense = () => {
+    navigate(`/app/create-expense/${groupId}`);
+  };
 
   useEffect(() => {
     const fetchGroupDetails = async () => {
@@ -22,6 +28,13 @@ const GroupDetail = () => {
       }
 
       try {
+        // Move groupId check before API call
+        if (!groupId) {
+          setErrorMessage("Invalid group ID. Please try again.");
+          setLoading(false);
+          return;
+        }
+
         const response = await fetch(
           `http://127.0.0.1:5000/api/groups/details?group_id=${groupId}`,
           {
@@ -32,11 +45,6 @@ const GroupDetail = () => {
           }
         );
 
-        if (!groupId) {
-          setErrorMessage("Invalid group ID. Please try again.");
-          setLoading(false);
-          return;
-        }
         const result = await response.json();
         console.log("API Response:", result);
 
@@ -82,9 +90,17 @@ const GroupDetail = () => {
             marginBottom: "1rem",
           }}
         >
-          <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            {group.name}
-          </h1>
+          <div className="flex justify-between items-center">
+            <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+              {group.name}
+            </h1>
+            <button
+              onClick={handleAddExpense}
+              className="bg-white text-indigo-600 px-4 py-2 rounded-md hover:bg-indigo-50"
+            >
+              Add Expense
+            </button>
+          </div>
           <p style={{ margin: "0.5rem 0 0", fontSize: "1rem" }}>
             Balance:{" "}
             <span

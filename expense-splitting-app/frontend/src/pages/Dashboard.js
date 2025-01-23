@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
 // Sidebar Component
@@ -90,8 +90,13 @@ const Card = ({ title, description, link, className, index }) => (
 
 // Main Dashboard Component
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleAddExpense = () => {
+    navigate("/app/create-expense");
+  };
 
   useEffect(() => {
     setIsLoaded(true);
@@ -108,9 +113,9 @@ const Dashboard = () => {
       link: "/create-group",
     },
     {
-      title: "Manage Groups",
-      description: "View, edit, or delete your existing groups.",
-      link: "/manage-groups",
+      title: "Add Expense", // New card
+      description: "Add a new expense to split with your group.",
+      onClick: handleAddExpense, // Use the function here
     },
     {
       title: "Recent Activity",
@@ -138,16 +143,31 @@ const Dashboard = () => {
                 isLoaded ? "opacity-100" : "opacity-0"
               }`}
             >
-              {cards.map((card, index) => (
-                <Card
-                  key={card.title}
-                  title={card.title}
-                  description={card.description}
-                  link={card.link}
-                  className="h-full card-hover-effect"
-                  index={index}
-                />
-              ))}
+              {cards.map((card, index) =>
+                card.onClick ? (
+                  <div
+                    key={card.title}
+                    onClick={card.onClick}
+                    className="cursor-pointer block h-full card-hover-effect"
+                  >
+                    <div className="bg-white h-full rounded-lg shadow-lg hover:shadow-xl p-8 transition-all duration-300 hover:bg-gray-50 transform hover:scale-105">
+                      <h3 className="text-2xl font-semibold mb-4 text-indigo-600">
+                        {card.title}
+                      </h3>
+                      <p className="text-gray-600 text-lg">
+                        {card.description}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <Card
+                    key={card.title}
+                    {...card}
+                    className="h-full card-hover-effect"
+                    index={index}
+                  />
+                )
+              )}
             </div>
           </div>
         </main>

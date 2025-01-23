@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import CreateExpenses from "./components/CreateExpenses";
 
 // Lazy load pages and components for better performance
 const UserLogin = lazy(() => import("./components/UserLogin"));
@@ -123,14 +122,6 @@ function App() {
                 element={
                   <PrivateRoute>
                     <GroupDetail />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/create-expense"
-                element={
-                  <PrivateRoute>
-                    <CreateExpenses />
                   </PrivateRoute>
                 }
               />
