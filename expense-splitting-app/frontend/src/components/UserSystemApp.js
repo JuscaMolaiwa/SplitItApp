@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import GroupList from "./GroupList"; // Displays user's groups
 import GroupDetail from "../pages/GroupDetail"; // Group-specific details and expenses
-import CreateExpenses from "./CreateExpenses"; // Form for adding new expenses
 import GroupMembers from "./GroupMembers"; // Displays members of a group
 
 const UserSystemApp = ({ onLogout }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true); // Sidebar state
-  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -66,17 +64,6 @@ const UserSystemApp = ({ onLogout }) => {
 
             {/* Group Detail: Expenses and Members */}
             <Route path="group/:id" element={<GroupDetail />} />
-
-            {/* Create Expense */}
-            <Route
-              path="create-expense/:groupId?"
-              element={
-                <CreateExpenses
-                  token={localStorage.getItem("auth_token")}
-                  onExpenseCreated={() => navigate("/app/group-list")}
-                />
-              }
-            />
 
             {/* Group Members */}
             <Route path="group/:id/members" element={<GroupMembers />} />

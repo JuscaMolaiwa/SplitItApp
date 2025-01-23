@@ -95,7 +95,7 @@ const Dashboard = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleAddExpense = () => {
-    navigate("/app/create-expense");
+    navigate("/create-expense");
   };
 
   useEffect(() => {
