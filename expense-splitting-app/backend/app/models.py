@@ -66,3 +66,23 @@ class ExpenseSplit(db.Model):
     name = db.Column(db.String(100), nullable=False)
 
     expense = db.relationship('Expense', backref='expense_splits') 
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(3), nullable=False)
+    payment_method = db.Column(db.String(50), nullable=False) # 'stripe' or 'paypal'
+    payment_status = db.Column(db.String(50), nullable=False) # 'pending','success' or 'failed'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='payments')
+
+class Balance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    balance = db.Column(db.Float, nullable=False, default=0.0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    user = db.relationship('User', backref='balance', uselist=False)

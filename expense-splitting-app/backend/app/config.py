@@ -8,6 +8,11 @@ class Config:
     ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS', 'pdf,jpg,png').split(',')  # Default file types
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:3000')  # Default origin
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    #Payment intergration
+    STRIPE_API_KEY = 'stripe_api_key'  # Default Stripe API key
+    PAYPAL_CLIENT_ID = 'paypal_client_id'  # Default PayPal client
+    PAYPAL_CLIENT_SECRET = 'paypal_client_secret'  # Default PayPal secret
+
 
 class DevelopmentConfig(Config):
     """Development configuration."""
