@@ -88,7 +88,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex">
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
@@ -98,32 +98,34 @@ const Dashboard = () => {
         <Header onMenuClick={toggleSidebar} />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full place-content-center">
-            <Card
-              title="Create Group"
-              description="Start a new group and split expenses easily."
-              link="/create-group"
-              className="w-full max-w-md"
-            />
-            <Card
-              title="Manage Groups"
-              description="View, edit, or delete your existing groups."
-              link="/manage-groups"
-              className="w-full max-w-md"
-            />
-            <Card
-              title="Recent Activity"
-              description="Check the latest updates on group expenses."
-              link="/recent-activity"
-              className="w-full max-w-md"
-            />
-            <Card
-              title="Profile"
-              description="Update your profile and account settings."
-              link="/profile"
-              className="w-full max-w-md"
-            />
+        <main className="flex-1 p-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
+              <Card
+                title="Create Group"
+                description="Start a new group and split expenses easily."
+                link="/create-group"
+                className="h-full"
+              />
+              <Card
+                title="Manage Groups"
+                description="View, edit, or delete your existing groups."
+                link="/manage-groups"
+                className="h-full"
+              />
+              <Card
+                title="Recent Activity"
+                description="Check the latest updates on group expenses."
+                link="/recent-activity"
+                className="h-full"
+              />
+              <Card
+                title="Profile"
+                description="Update your profile and account settings."
+                link="/profile"
+                className="h-full"
+              />
+            </div>
           </div>
         </main>
       </div>
