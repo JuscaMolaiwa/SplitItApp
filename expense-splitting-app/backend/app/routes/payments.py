@@ -145,3 +145,24 @@ def paypal_success():
     return jsonify({'status':'success'}), 200
   else:
     return jsonify({'error': payment.error}),400
+
+@bp.route('/api/payment/history', methods=['GET'])
+@login_required
+def get_payment_history(user_id):
+  """Retrieve payment history for the logged-in user"""
+  try:
+    payments = Payment.query.filter_by(user_id=user_id).all()
+    payment_history = [
+      {
+        'id': payment.id,
+        'amount': payment.amount,
+        'currency': payment.currency,
+        'payment_method': payment.payment_method,
+        'payment_status': payment.payment_status,
+        'created_at': payment.created_at
+      }
+      for payment in payments
+    ]
+    return jsonify({'payment_history': payment_history}), 200
+  except Exception as e:
+    return jsonify({'error': 'Failed to retrive payment history', 'details': str(e)}), 500
